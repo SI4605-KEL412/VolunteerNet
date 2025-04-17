@@ -5,12 +5,14 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AuthController;
 
 // Halaman utama diarahkan ke index feedback
-Route::get('/', [FeedbackController::class, 'index'])->name('dashboard');
+Route::get('/', [FeedbackController::class, 'index'])->name('index');
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
 
 // Resource untuk feedback (CRUD)
 Route::resource('feedback', FeedbackController::class);
-Route::resource('dashboard', FeedbackController::class);
 // Route untuk autentikasi (login, register, logout)
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

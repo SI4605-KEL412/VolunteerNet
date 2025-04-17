@@ -119,8 +119,4 @@ class FeedbackController extends Controller
         // Mengarahkan kembali ke halaman feedback setelah berhasil dihapus
         return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dihapus.');
     }
-    public function dashboard()
-    {
-    return view('dashboard');
-    }
 }

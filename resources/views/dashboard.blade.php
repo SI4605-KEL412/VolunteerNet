@@ -34,7 +34,7 @@
       </div>
 
       <div id="volunteerMenu" class="space-y-2">
-  <a href="{{route('')}}" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
+  <a href="" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
     Search Event
   </a>
   <a href="/portfolio" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">

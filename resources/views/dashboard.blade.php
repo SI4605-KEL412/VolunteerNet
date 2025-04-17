@@ -33,18 +33,31 @@
         </div>
       </div>
 
-      <div id="volunteerMenu">
-        <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Search Event</button>
-        <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Build Portfolio</button>
-        <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Activities</button>
-        <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Notification</button>
-      </div>
+      <div id="volunteerMenu" class="space-y-2">
+  <a href="{{route('')}}" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
+    Search Event
+  </a>
+  <a href="/portfolio" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
+    Build Portfolio
+  </a>
+  <a href="/activities" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
+    Activities
+  </a>
+  <a href="/notifications" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
+    Notification
+  </a>
+  <a href="/feedback" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
+    Feedback
+  </a>
+</div>
+
 
       <div id="eoMenu" class="hidden">
         <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Create Event</button>
         <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Manage Volunteer</button>
         <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Manage Event</button>
         <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Notification</button>
+        <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Feedback</button>
       </div>
     </aside>
 

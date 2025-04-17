@@ -1128,6 +1128,10 @@ return array(
     'Illuminate\\Cache\\MemcachedConnector' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedConnector.php',
     'Illuminate\\Cache\\MemcachedLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedLock.php',
     'Illuminate\\Cache\\MemcachedStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedStore.php',
+<<<<<<< Updated upstream
+=======
+    'Illuminate\\Cache\\MemoizedStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemoizedStore.php',
+>>>>>>> Stashed changes
     'Illuminate\\Cache\\NoLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/NoLock.php',
     'Illuminate\\Cache\\NullStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/NullStore.php',
     'Illuminate\\Cache\\PhpRedisLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/PhpRedisLock.php',

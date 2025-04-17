@@ -197,7 +197,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a href="{{route('')}}" class="nav-link active">Home</a>
+                            <a href="{{route('dashboard')}}" class="nav-link active">Home</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('feedback.index') }}" class="nav-link">Feedback</a>

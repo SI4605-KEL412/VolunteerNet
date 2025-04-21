@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Activity;
+use Illuminate\Support\Facades\Auth;
+
+class ActivityController extends Controller
+{
+    public function index()
+    {
+
+        $activities = Activity::where('userID', Auth::id())
+                              ->orderBy('date', 'desc')
+                              ->get();
+
+        return view('activities.index', compact('activities'));
+    }
+
+}

@@ -6,4 +6,4 @@ use App\Http\Controllers\manageUserController;
 Route::get('/', function () {
     return view('dashboard');
 });
-Route::resource('manageUser',manageUserController::class);
+Route::resource('/manageUser',manageUserController::class);

@@ -27,7 +27,7 @@
                 <h2>Create New User</h2>
                 <div class="text-end">
                     <span class="me-2">Admin</span>
-                    <img src="{{ asset('images/avatar.png') }}" alt="Admin" class="rounded-circle" width="40">
+                    <img src="{{ asset('avatar.png') }}" alt="Admin" class="rounded-circle" width="40">
                 </div>
             </div>
 

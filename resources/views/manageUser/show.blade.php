@@ -27,7 +27,7 @@
                 <h2>User Details</h2>
                 <div class="text-end">
                     <span class="me-2">Admin</span>
-                    <img src="{{ asset('images/avatar.png') }}" alt="Admin" class="rounded-circle" width="40">
+                    <img src="{{ asset('avatar.png') }}" alt="Admin" class="rounded-circle" width="40">
                 </div>
             </div>
 
@@ -35,7 +35,7 @@
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="col-md-3 text-center">
-                            <img src="{{ asset('images/avatar.png') }}" alt="{{ $data->name }}" class="rounded-circle mb-3" width="120">
+                            <img src="{{ asset('avatar.png') }}" alt="{{ $data->name }}" class="rounded-circle mb-3" width="120">
                             <h4>{{ $data->name }}</h4>
                             </span>
                             <span class="badge {{ $data->status === 'active' ? 'bg-success' : ($data->status === 'inactive' ? 'bg-warning' : 'bg-danger') }}">

@@ -8,12 +8,14 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 
 class BookmarkTest extends TestCase
 {
     /**
      * A basic feature test example.
      */
+    #[Test]
     public function user_can_open_bookmark_page(): void
     {
         $response = $this->get('/bookmarks');
@@ -21,6 +23,7 @@ class BookmarkTest extends TestCase
         $response->assertStatus(500);
     }
 
+    #[Test]
     public function user_can_redirect_to_bookmark_after_saving(): void
     {
         $response = $this->get('/events/{event}/bookmark');
@@ -29,6 +32,7 @@ class BookmarkTest extends TestCase
     }
     use DatabaseMigrations;
 
+    #[Test]
     public function user_can_bookmark_an_event()
     {
         $user = User::factory()->create();
@@ -39,12 +43,13 @@ class BookmarkTest extends TestCase
         $response = $this->post(route('bookmark.toggle', $event->id));
 
         $response->assertRedirect(); // diarahkan kembali
-        $this->assertDatabaseHas('bookmark_event', [
+        $this->assertDatabaseHas('bookmarks', [
             'user_id' => $user->id,
             'event_id' => $event->id,
         ]);
     }
 
+    #[Test]
     public function user_can_remove_bookmark()
     {
         $user = User::factory()->create();
@@ -58,7 +63,7 @@ class BookmarkTest extends TestCase
         $response = $this->post(route('bookmark.toggle', $event->id));
 
         $response->assertRedirect();
-        $this->assertDatabaseMissing('bookmark_event', [
+        $this->assertDatabaseMissing('bookmarks', [
             'user_id' => $user->id,
             'event_id' => $event->id,
         ]);

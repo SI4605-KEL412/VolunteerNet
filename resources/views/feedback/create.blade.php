@@ -29,10 +29,10 @@
                         @enderror
                     </div>
 
-                    <!-- Input nama restoran -->
+                    <!-- Input nama volunteer -->
                     <div class="col-md-12">
-                        <input type="text" class="form-control" name="volunteer_name" placeholder="volunteer_name" required="" value="{{ old('volunteer_name') }}">
-                        @error('volunteer_name')
+                        <input type="text" class="form-control" name="Event Name / VolunteerNet" placeholder="Event Name / VolunteerNet" required="" value="{{ old('Event Name / VolunteerNet') }}">
+                        @error('Event Name / VolunteerNet')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

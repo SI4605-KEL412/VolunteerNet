@@ -49,6 +49,9 @@
   <a href="/feedback" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
     Feedback
   </a>
+  <a href="/Detail Recruiment" class="block text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC] text-white">
+    Detail Recruiment
+  </a>
 </div>
 
 
@@ -58,6 +61,7 @@
         <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Manage Event</button>
         <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Notification</button>
         <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Feedback</button>
+        <button class="text-left font-semibold bg-[#19376D] py-3 px-4 rounded hover:bg-[#576CBC]">Detail Recruiment</button>
       </div>
     </aside>
 

@@ -5,9 +5,9 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AuthController;
 
 // Halaman utama diarahkan ke index feedback
-Route::get('/', [FeedbackController::class, 'create'])->name('create');
+Route::get('/feedback', [FeedbackController::class, 'create'])->name('create');
 
-Route::get('/dashboard', function () {
+Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
 

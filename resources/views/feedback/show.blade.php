@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h5 class="card-title text-primary">{{ $feedback->customer_name }}</h5>
                     <p class="text-muted mb-1"><strong>Email:</strong> {{ $feedback->email }}</p>
-                    <p class="text-muted mb-1"><strong>Restaurant:</strong> {{ $feedback->restaurant_name }}</p>
+                    <p class="text-muted mb-1"><strong>Volunteer:</strong> {{ $feedback->volunteer_name }}</p>
                     <p class="mb-4"><strong>Feedback:</strong> {{ $feedback->feedback }}</p>
 
                     <!-- Back to Feedback List Button -->

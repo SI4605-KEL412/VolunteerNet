@@ -32,10 +32,10 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="restaurant_name" class="form-label">Restaurant Name</label>
-                    <input type="text" class="form-control shadow-sm" id="restaurant_name" name="restaurant_name" 
-                           value="{{ old('restaurant_name', $feedback->restaurant_name) }}" required>
-                    @error('restaurant_name')
+                    <label for="volunteer_name" class="form-label">Volunteer Name</label>
+                    <input type="text" class="form-control shadow-sm" id="volunteer_name" name="volunteer_name" 
+                           value="{{ old('volunteer_name', $feedback->volunteer_name) }}" required>
+                    @error('volunteer_name')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>

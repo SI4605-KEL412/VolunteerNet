@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
+    'App\\Models\\manageUser' => $baseDir . '/app/Models/manageUser.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Brick\\Math\\BigDecimal' => $vendorDir . '/brick/math/src/BigDecimal.php',
@@ -1128,10 +1129,7 @@ return array(
     'Illuminate\\Cache\\MemcachedConnector' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedConnector.php',
     'Illuminate\\Cache\\MemcachedLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedLock.php',
     'Illuminate\\Cache\\MemcachedStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedStore.php',
-<<<<<<< Updated upstream
-=======
     'Illuminate\\Cache\\MemoizedStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemoizedStore.php',
->>>>>>> Stashed changes
     'Illuminate\\Cache\\NoLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/NoLock.php',
     'Illuminate\\Cache\\NullStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/NullStore.php',
     'Illuminate\\Cache\\PhpRedisLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/PhpRedisLock.php',

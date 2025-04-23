@@ -29,10 +29,22 @@
                         @enderror
                     </div>
 
-                    <!-- Input nama volunteer -->
+                    <!-- Pilih jenis feedback -->
                     <div class="col-md-12">
-                        <input type="text" class="form-control" name="Event Name / VolunteerNet" placeholder="Event Name / VolunteerNet" required="" value="{{ old('Event Name / VolunteerNet') }}">
-                        @error('Event Name / VolunteerNet')
+                        <select name="feedback_type" class="form-control" required>
+                            <option value="">Select Feedback Type</option>
+                            <option value="event" {{ old('feedback_type') == 'event' ? 'selected' : '' }}>Event</option>
+                            <option value="ceo" {{ old('feedback_type') == 'ceo' ? 'selected' : '' }}>CEO</option>
+                        </select>
+                        @error('feedback_type')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Input nama event (hanya tampil jika feedback_type = event) -->
+                    <div class="col-md-12" id="event_name_div" style="display: none;">
+                        <input type="text" class="form-control" name="event_name" placeholder="Event Name" value="{{ old('event_name') }}">
+                        @error('event_name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -60,6 +72,29 @@
     </div>
 </div>
 @endsection
+
+<script>
+    // Menunggu DOM siap sebelum menjalankan skrip
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fungsi untuk menampilkan atau menyembunyikan field event_name
+        function toggleEventNameField() {
+            var eventNameDiv = document.getElementById('event_name_div');
+            var feedbackType = document.querySelector('[name="feedback_type"]').value;
+            if (feedbackType === 'event') {
+                eventNameDiv.style.display = 'block';
+            } else {
+                eventNameDiv.style.display = 'none';
+            }
+        }
+
+        // Menambahkan event listener untuk perubahan pada feedback_type
+        var feedbackTypeSelect = document.querySelector('[name="feedback_type"]');
+        feedbackTypeSelect.addEventListener('change', toggleEventNameField);
+
+        // Memeriksa apakah feedback_type sudah memiliki nilai pada saat halaman pertama kali dimuat
+        toggleEventNameField();
+    });
+</script>
 
 @section('styles')
 <style>

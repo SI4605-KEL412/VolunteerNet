@@ -28,12 +28,11 @@
             color: #333;
         }
 
-        /* Header Styling */
         header {
-            background: linear-gradient(135deg, #2a65a1, #6ca1d5); /* Gradasi biru yang lebih gelap */
+            background: linear-gradient(135deg, #2a65a1, #6ca1d5);
             color: white;
             padding: 15px 0;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); /* Shadow bawah header */
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
             position: fixed;
             width: 100%;
             top: 0;
@@ -72,13 +71,12 @@
             color: #ffcc00;
         }
 
-        /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #2a65a1, #6ca1d5); /* Gradasi biru */
+            background: linear-gradient(135deg, #2a65a1, #6ca1d5);
             color: white;
             padding: 120px 20px;
             text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Shadow sekitar hero section */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
             margin-top: 80px;
             border-radius: 12px;
             animation: fadeIn 1.5s ease-out;
@@ -121,16 +119,14 @@
             }
         }
 
-        /* Main Content */
         main {
             background: #fff;
             margin-top: 20px;
             padding: 40px 20px;
             border-radius: 8px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Shadow untuk konten utama */
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Footer Styling */
         footer {
             background-color: #2d2d2d;
             color: white;
@@ -138,7 +134,7 @@
             text-align: center;
             margin-top: 40px;
             border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Shadow atas footer */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         footer a {
@@ -167,7 +163,6 @@
             transform: translateY(-3px);
         }
 
-        /* Responsive Styling */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
@@ -197,7 +192,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a href="{{route('dashboard')}}" class="nav-link active">Home</a>
+                            <a href="{{ route('dashboard') }}" class="nav-link active">Home</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('feedback.index') }}" class="nav-link">Feedback</a>
@@ -212,7 +207,8 @@
     <section class="hero" data-aos="fade-up">
         <h1>Welcome to Feedback Page</h1>
         <p>Give Your Feedback!</p>
-        <a href="{{ route('feedback.index') }}" class="btn btn-custom mt-4">View Feedback List</a>
+        <a href="{{ route('feedback.index') }}" class="btn btn-custom mt-4 me-3">View Feedback List</a>
+        <a href="{{ route('feedback.create') }}" class="btn btn-outline-light mt-4">Create Feedback</a>
     </section>
 
     <!-- Main Content -->
@@ -241,7 +237,7 @@
     <!-- AOS JS (Animate on Scroll) -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-        AOS.init(); // Initialize AOS
+        AOS.init();
     </script>
 </body>
 </html>

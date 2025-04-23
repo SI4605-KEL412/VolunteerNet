@@ -8,10 +8,9 @@
         <div class="col-lg-8">
             <h2 class="text-center mb-4 text-primary font-weight-bold">Edit Feedback</h2>
 
-            <!-- Form edit feedback -->
             <form action="{{ route('feedback.update', $feedback->id) }}" method="POST" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
                 @csrf
-                @method('PUT') <!-- Metode PUT untuk update -->
+                @method('PUT')
 
                 <div class="mb-4">
                     <label for="customer_name" class="form-label">Customer Name</label>
@@ -32,10 +31,22 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="volunteer_name" class="form-label">Volunteer Name</label>
-                    <input type="text" class="form-control shadow-sm" id="volunteer_name" name="volunteer_name" 
-                           value="{{ old('volunteer_name', $feedback->volunteer_name) }}" required>
-                    @error('volunteer_name')
+                    <label for="feedback_type" class="form-label">Feedback Type</label>
+                    <select id="feedback_type" name="feedback_type" class="form-select shadow-sm" required>
+                        <option value="">-- Pilih Jenis Feedback --</option>
+                        <option value="event" {{ old('feedback_type', $feedback->feedback_type) == 'event' ? 'selected' : '' }}>Event</option>
+                        <option value="ceo" {{ old('feedback_type', $feedback->feedback_type) == 'ceo' ? 'selected' : '' }}>CEO</option>
+                    </select>
+                    @error('feedback_type')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4" id="event_name_div" style="{{ old('feedback_type', $feedback->feedback_type) === 'event' ? '' : 'display: none;' }}">
+                    <label for="event_name" class="form-label">Event Name</label>
+                    <input type="text" class="form-control shadow-sm" id="event_name" name="event_name" 
+                           value="{{ old('event_name', $feedback->event_name) }}">
+                    @error('event_name')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -57,6 +68,29 @@
     </div>
 </div>
 @endsection
+
+<script>
+    // Menunggu DOM siap sebelum menjalankan skrip
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fungsi untuk menampilkan atau menyembunyikan field event_name
+        function toggleEventNameField() {
+            var eventNameDiv = document.getElementById('event_name_div');
+            var feedbackType = document.querySelector('[name="feedback_type"]').value;
+            if (feedbackType === 'event') {
+                eventNameDiv.style.display = 'block';
+            } else {
+                eventNameDiv.style.display = 'none';
+            }
+        }
+
+        // Menambahkan event listener untuk perubahan pada feedback_type
+        var feedbackTypeSelect = document.querySelector('[name="feedback_type"]');
+        feedbackTypeSelect.addEventListener('change', toggleEventNameField);
+
+        // Memeriksa apakah feedback_type sudah memiliki nilai pada saat halaman pertama kali dimuat
+        toggleEventNameField();
+    });
+</script>
 
 @section('styles')
 <style>

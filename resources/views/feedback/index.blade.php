@@ -27,9 +27,19 @@
                     <div class="card shadow-lg border-0 rounded-4" data-aos="fade-up" data-aos-delay="100">
                         <div class="card-body p-4">
                             <h5 class="card-title text-primary fw-bold">{{ $feedback->customer_name }}</h5>
-                            <p class="text-secondary small"><strong>Email:</strong> {{ $feedback->email }}</p>
-                            <p class="text-secondary small"><strong>Volunteer:</strong> {{ $feedback->volunteer_name }}</p>
-                            <p class="text-dark"><strong>Feedback:</strong> {{ $feedback->feedback }}</p>
+                            <p class="text-secondary small mb-1"><strong>Email:</strong> {{ $feedback->email }}</p>
+                            <p class="text-dark mb-2"><strong>Feedback:</strong> {{ $feedback->feedback }}</p>
+
+                            <!-- Tambahan feedback_type dan event_name -->
+                            <div class="mb-2">
+                                <span class="badge bg-info text-dark me-2">
+                                    {{ ucfirst($feedback->feedback_type) }}
+                                </span>
+                                @if($feedback->feedback_type === 'event')
+                                    <span class="badge bg-secondary">{{ $feedback->event_name }}</span>
+                                @endif
+                            </div>
+
                             <div class="d-flex align-items-center mt-3">
                                 <!-- Tombol Edit -->
                                 <a href="{{ route('feedback.edit', $feedback->id) }}" class="btn btn-warning btn-rounded btn-sm me-2">
@@ -57,103 +67,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('styles')
-<style>
-    /* Gradient Text */
-    .text-gradient {
-        background: linear-gradient(90deg, #007bff, #6c63ff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    /* Card Styling */
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Button Styling */
-    .btn-rounded {
-        border-radius: 30px;
-        padding: 10px 20px;
-        font-size: 14px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-warning {
-        background: linear-gradient(to right, #ffc107, #ffca28);
-        color: white;
-        font-weight: bold;
-        border: none;
-    }
-
-    .btn-warning:hover {
-        background: #ffca28;
-        opacity: 0.9;
-    }
-
-    .btn-danger {
-        background: linear-gradient(to right, #dc3545, #e4606d);
-        color: white;
-        font-weight: bold;
-        border: none;
-    }
-
-    .btn-danger:hover {
-        background: #e4606d;
-        opacity: 0.9;
-    }
-
-    /* Alert Styling */
-    .alert-success {
-        background-color: #eaf7ea;
-        color: #2f8038;
-        border: none;
-    }
-
-    .fade-in {
-        animation: fadeIn 0.8s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .btn {
-            font-size: 12px;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-        }
-
-        .card-body {
-            padding: 15px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .btn {
-            font-size: 11px;
-            padding: 8px 12px;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-        }
-    }
-</style>
 @endsection

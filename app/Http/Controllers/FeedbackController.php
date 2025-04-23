@@ -37,7 +37,8 @@ class FeedbackController extends Controller
         $request->validate([
             'customer_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'volunteer_name' => 'required|string|max:255',
+            'feedback_type' => 'required|in:event,ceo', // Menambahkan validasi untuk feedback_type
+            'event_name' => 'nullable|string|max:255', // Validasi untuk event_name
             'feedback' => 'required|string',
         ]);
 
@@ -45,7 +46,8 @@ class FeedbackController extends Controller
         Feedback::create([
             'customer_name' => $request->customer_name,
             'email' => $request->email,
-            'volunteer_name' => $request->volunteer_name,
+            'feedback_type' => $request->feedback_type,
+            'event_name' => $request->feedback_type == 'event' ? $request->event_name : null, // Hanya simpan event_name jika feedback_type = event
             'feedback' => $request->feedback,
         ]);
 
@@ -86,7 +88,8 @@ class FeedbackController extends Controller
         $request->validate([
             'customer_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'volunteer_name' => 'required|string|max:255',
+            'feedback_type' => 'required|in:event,ceo', // Validasi feedback_type
+            'event_name' => 'nullable|string|max:255', // Validasi event_name
             'feedback' => 'required|string',
         ]);
 
@@ -97,7 +100,8 @@ class FeedbackController extends Controller
         $feedback->update([
             'customer_name' => $request->customer_name,
             'email' => $request->email,
-            'volunteer_name' => $request->volunteer_name,
+            'feedback_type' => $request->feedback_type,
+            'event_name' => $request->feedback_type == 'event' ? $request->event_name : null, // Update event_name jika feedback_type = event
             'feedback' => $request->feedback,
         ]);
 

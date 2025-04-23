@@ -17,7 +17,8 @@ class Feedback extends Model
     protected $fillable = [
         'customer_name',
         'email',
-        'volunteer_name',
         'feedback',
+        'feedback_type',
+        'event_name',
     ];
 }

@@ -1,13 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-<<<<<<< Updated upstream
-        'reference' => '799d4405a4ca8c67cdc0c11c6dfd4e79b7fa1ae7',
-=======
-        'reference' => '0ff4026e1d014785eccd2e325a69f65e90473bd4',
->>>>>>> Stashed changes
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -380,6 +376,15 @@
                 0 => '*',
             ),
         ),
+        'laravel/breeze' => array(
+            'pretty_version' => 'v2.3.6',
+            'version' => '2.3.6.0',
+            'reference' => '390cbc433cb72fa6050965000b2d56c9ba6fd713',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laravel/breeze',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
         'laravel/framework' => array(
             'pretty_version' => 'v12.9.0',
             'version' => '12.9.0.0',
@@ -390,13 +395,9 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-<<<<<<< Updated upstream
-            'reference' => '799d4405a4ca8c67cdc0c11c6dfd4e79b7fa1ae7',
-=======
-            'reference' => '0ff4026e1d014785eccd2e325a69f65e90473bd4',
->>>>>>> Stashed changes
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

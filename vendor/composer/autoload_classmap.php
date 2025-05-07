@@ -6,8 +6,10 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
+    'App\\Models\\manageUser' => $baseDir . '/app/Models/manageUser.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Brick\\Math\\BigDecimal' => $vendorDir . '/brick/math/src/BigDecimal.php',
@@ -1128,10 +1130,7 @@ return array(
     'Illuminate\\Cache\\MemcachedConnector' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedConnector.php',
     'Illuminate\\Cache\\MemcachedLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedLock.php',
     'Illuminate\\Cache\\MemcachedStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemcachedStore.php',
-<<<<<<< Updated upstream
-=======
     'Illuminate\\Cache\\MemoizedStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/MemoizedStore.php',
->>>>>>> Stashed changes
     'Illuminate\\Cache\\NoLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/NoLock.php',
     'Illuminate\\Cache\\NullStore' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/NullStore.php',
     'Illuminate\\Cache\\PhpRedisLock' => $vendorDir . '/laravel/framework/src/Illuminate/Cache/PhpRedisLock.php',
@@ -2363,6 +2362,12 @@ return array(
     'Illuminate\\View\\ViewFinderInterface' => $vendorDir . '/laravel/framework/src/Illuminate/View/ViewFinderInterface.php',
     'Illuminate\\View\\ViewName' => $vendorDir . '/laravel/framework/src/Illuminate/View/ViewName.php',
     'Illuminate\\View\\ViewServiceProvider' => $vendorDir . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
+    'Laravel\\Breeze\\BreezeServiceProvider' => $vendorDir . '/laravel/breeze/src/BreezeServiceProvider.php',
+    'Laravel\\Breeze\\Console\\InstallCommand' => $vendorDir . '/laravel/breeze/src/Console/InstallCommand.php',
+    'Laravel\\Breeze\\Console\\InstallsApiStack' => $vendorDir . '/laravel/breeze/src/Console/InstallsApiStack.php',
+    'Laravel\\Breeze\\Console\\InstallsBladeStack' => $vendorDir . '/laravel/breeze/src/Console/InstallsBladeStack.php',
+    'Laravel\\Breeze\\Console\\InstallsInertiaStacks' => $vendorDir . '/laravel/breeze/src/Console/InstallsInertiaStacks.php',
+    'Laravel\\Breeze\\Console\\InstallsLivewireStack' => $vendorDir . '/laravel/breeze/src/Console/InstallsLivewireStack.php',
     'Laravel\\Pail\\Console\\Commands\\PailCommand' => $vendorDir . '/laravel/pail/src/Console/Commands/PailCommand.php',
     'Laravel\\Pail\\Contracts\\Printer' => $vendorDir . '/laravel/pail/src/Contracts/Printer.php',
     'Laravel\\Pail\\File' => $vendorDir . '/laravel/pail/src/File.php',

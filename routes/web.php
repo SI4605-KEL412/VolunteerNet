@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\BookmarkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::resource('/events', EventController::class);
+    Route::post('/events/{event}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmark.toggle');
+    Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmark.index');
 });
+
+
 
 require __DIR__.'/auth.php';

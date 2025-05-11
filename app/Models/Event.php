@@ -14,18 +14,18 @@ class Event extends Model
 
     // Tentukan kolom yang dapat diisi (mass assignable)
     protected $fillable = [
-        'name',
+        'organizer_id',
+        'title',
         'description',
         'location',
         'start_date',
         'end_date',
         'status',
-        'image_url'
     ];
 
     // Tentukan kolom primary key jika menggunakan selain 'id'
     protected $primaryKey = 'event_id'; // Menggunakan event_id sebagai primary key
 
     // Tentukan waktu format tanggal sesuai dengan field lainnya
-    public $timestamps = true;
+    public $timestamps = false;
 }

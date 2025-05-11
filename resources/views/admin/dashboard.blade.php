@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(to bottom, #0066cc, #f0f8ff);
             color: #003366;
+            margin: 0;
+            padding: 0;
         }
 
         .hero {
@@ -35,6 +38,7 @@
             width: 250px;
             background-color: #004080;
             color: white;
+            z-index: 1000;
         }
 
         .sidebar .nav-link {
@@ -48,6 +52,14 @@
         .content {
             margin-left: 250px;
         }
+
+        .summary-cards {
+            padding: 20px;
+        }
+
+        .events-section {
+            padding: 20px;
+        }
     </style>
 </head>
 
@@ -56,35 +68,26 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="d-flex justify-content-between align-items-center p-3">
-            <span class="text-white">Dashboard</span>
+            <span class="text-white fs-4 fw-bold">Dashboard</span>
         </div>
         <ul class="nav flex-column p-3">
             <li class="nav-item">
-                <a class="nav-link" href="#">Activities</a>
+                <a class="nav-link" href="{{ route('manageusers.index') }}" href="#">Manage Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Feedback</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Build Portfolio</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Notification</a>
-            </li>
-            <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('dashboardEO') }}">Go to EO Dashboard</a>
+                <a class="nav-link" href="#">Manage Events</a>
             </li>
         </ul>
     </div>
 
-    <!-- Main Content -->
+      <!-- Main Content -->
     <div class="content">
         <!-- Hero Section -->
         <div class="hero">
-            <h1 class="mb-3">Welcome, {{ $userName }}!</h1>
-            <p class="mb-4">This is your dashboard.</p>
-            <a href="{{ route('logout') }}" 
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+            <h1 class="mb-3">Welcome! ,</h1>
+            <p class="mb-4">This is your dashboard Eo</p>
+            <a href="{{ route('logout') }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                class="btn btn-danger">Logout</a>
 
             <!-- Logout form -->
@@ -93,31 +96,6 @@
             </form>
         </div>
 
-        <!-- Top Events Section -->
-        <div class="container mt-5">
-            <h2 class="text-center mb-4">3 Top Events</h2>
-            <div class="row">
-                @foreach($events as $event)
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $event->title }}</h5>
-                                <p class="card-text">{{ Str::limit($event->description, 100) }}</p>
-                                <a href="#" class="btn btn-primary">View Event</a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            <div class="mt-4 text-center">
-                <a href="#" class="btn btn-success">See All Events</a>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
-
 </html>

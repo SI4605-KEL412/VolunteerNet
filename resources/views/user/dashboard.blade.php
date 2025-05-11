@@ -72,7 +72,7 @@
                 <a class="nav-link" href="#">Notification</a>
             </li>
             <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('dashboardEO') }}">Go to EO Dashboard</a>
+                <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
             </li>
         </ul>
     </div>
@@ -83,8 +83,8 @@
         <div class="hero">
             <h1 class="mb-3">Welcome, {{ $userName }}!</h1>
             <p class="mb-4">This is your dashboard.</p>
-            <a href="{{ route('logout') }}" 
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+            <a href="{{ route('logout') }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                class="btn btn-danger">Logout</a>
 
             <!-- Logout form -->

@@ -78,16 +78,16 @@
     <!-- Main Content -->
     <div class="content">
        <!-- Hero Section -->
-<div class="hero">
-    <h1 class="mb-3">Welcome, {{ $userName }} as EO!</h1>
-    <p class="mb-4">This is your dashboard.</p>
-    <div class="d-flex flex-column flex-md-row gap-2">
-        <a href="{{ route('logout') }}" 
-           onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
-           class="btn btn-danger">Logout</a>
+    <div class="hero">
+        <h1 class="mb-3">Welcome, {{ $userName }} as EO!</h1>
+        <p class="mb-4">This is your dashboard.</p>
+        <div class="d-flex flex-column flex-md-row gap-2">
+            <a href="{{ route('logout') }}"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+            class="btn btn-danger">Logout</a>
 
-        <a href="{{ route('user.dashboard') }}" class="btn btn-light">Back to User Dashboard</a>
-    </div>
+            <a href="{{ route('user.dashboard') }}" class="btn btn-light">Back to User Dashboard</a>
+        </div>
 
     <!-- Logout form -->
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

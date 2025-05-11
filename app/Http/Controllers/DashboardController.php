@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         // Ambil data 3 event terbaru dari database
         $events = Event::orderBy('start_date', 'desc')->limit(3)->get();
-        
+
         // Ambil nama user yang sedang login
         $userName = auth()->user()->name;
 
@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
     $events = Event::orderBy('start_date', 'desc')->limit(3)->get();
 
-    return view('user.dashboardEO', compact('events', 'userName'));
+    return view('admin.dashboard', compact('events', 'userName'));
 }
 
 }

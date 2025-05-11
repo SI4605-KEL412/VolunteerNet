@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\manageUserController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -43,4 +44,12 @@ Route::middleware('auth')->group(function () {
     Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('events.edit'); // Halaman edit event
     Route::put('events/{id}', [EventController::class, 'update'])->name('events.update'); // Proses update event
     Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy'); // Hapus event
+
+
+    //Manage User
+    Route::get('manageusers', [manageUserController::class, 'index'])->name('manageusers.index'); // Daftar semua user
+    Route::get('manageusers/{id}', [manageUserController::class, 'show'])->name('manageusers.show'); // Lihat detail user
+    Route::get('manageusers/{id}/edit', [manageUserController::class, 'edit'])->name('manageusers.edit'); // Halaman edit user
+    Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update'); // Proses update user
+    Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy'); // Hapus user
 });

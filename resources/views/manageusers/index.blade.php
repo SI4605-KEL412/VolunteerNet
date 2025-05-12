@@ -75,7 +75,7 @@
                 <a class="nav-link" href="{{ route('manageusers.index') }}">Manage Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Manage Events</a>
+                <a class="nav-link" href="{{ route('events.index') }}">Manage Events</a>
             </li>
         </ul>
     </div>

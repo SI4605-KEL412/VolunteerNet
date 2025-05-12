@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ManageUserController;
-use App\Http\Controllers\FeedbackController; // Menambahkan controller feedback
+use App\Http\Controllers\FeedbackController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -23,42 +23,45 @@ Route::post('login', [AuthController::class, 'login']);
 // Logout
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Hanya bisa diakses jika sudah login
+// Rute yang hanya bisa diakses jika sudah login
 Route::middleware('auth')->group(function () {
 
-    // Dashboard untuk User (Volunteer)
+    // Dashboard
     Route::get('dashboard/user', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
-
-    // Dashboard untuk Admin
     Route::get('dashboard/admin', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
-
-    // Dashboard untuk Event Organizer (EO)
     Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('dashboardEO');
 
-    // Halaman Event
+    // Event
     Route::get('event/{id}', [EventController::class, 'show'])->name('event.show');
     Route::get('events', [EventController::class, 'index'])->name('events.index');
-    Route::get('events/create', [EventController::class, 'create'])->name('events.create'); // Halaman buat event
-    Route::post('events', [EventController::class, 'store'])->name('events.store'); // Proses penyimpanan event
-    Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('events.edit'); // Halaman edit event
-    Route::put('events/{id}', [EventController::class, 'update'])->name('events.update'); // Proses update event
-    Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy'); // Hapus event
+    Route::get('events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('events', [EventController::class, 'store'])->name('events.store');
+    Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('events/{id}', [EventController::class, 'update'])->name('events.update');
+    Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
 
-    // Manage User
-    Route::get('manageusers', [ManageUserController::class, 'index'])->name('manageusers.index'); // Daftar semua user
-    Route::get('manageusers/{id}', [ManageUserController::class, 'show'])->name('manageusers.show'); // Lihat detail user
-    Route::get('manageusers/{id}/edit', [ManageUserController::class, 'edit'])->name('manageusers.edit'); // Halaman edit user
-    Route::put('manageusers/{id}', [ManageUserController::class, 'update'])->name('manageusers.update'); // Proses update user
-    Route::delete('manageusers/{id}', [ManageUserController::class, 'destroy'])->name('manageusers.destroy'); // Hapus user
+    // Manage Users
+    Route::get('manageusers', [ManageUserController::class, 'index'])->name('manageusers.index');
+    Route::get('manageusers/{id}', [ManageUserController::class, 'show'])->name('manageusers.show');
+    Route::get('manageusers/{id}/edit', [ManageUserController::class, 'edit'])->name('manageusers.edit');
+    Route::put('manageusers/{id}', [ManageUserController::class, 'update'])->name('manageusers.update');
+    Route::delete('manageusers/{id}', [ManageUserController::class, 'destroy'])->name('manageusers.destroy');
 
     // Feedback
-    Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index'); // Menampilkan daftar feedback
-    Route::get('feedback/create', [FeedbackController::class, 'create'])->name('feedback.create'); // Form untuk membuat feedback
-    Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store'); // Proses penyimpanan feedback
-    Route::get('feedback/{id}', [FeedbackController::class, 'show'])->name('feedback.show'); // Menampilkan detail feedback
-    Route::get('feedback/{id}/edit', [FeedbackController::class, 'edit'])->name('feedback.edit'); // Form untuk mengedit feedback
-    Route::put('feedback/{id}', [FeedbackController::class, 'update'])->name('feedback.update'); // Menyimpan perubahan feedback
-    Route::delete('feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy'); // Menghapus feedback
+    Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+
+    // Menampilkan form create feedback dengan list event
+    Route::get('feedback/create', function () {
+        $events = \App\Models\Event::all();
+        return view('feedback.create', compact('events'));
+    })->name('feedback.create');
+
+    Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+    Route::get('feedback/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+    Route::get('feedback/{id}/edit', [FeedbackController::class, 'edit'])->name('feedback.edit');
+    Route::put('feedback/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
+    Route::delete('feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+
 });

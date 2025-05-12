@@ -67,7 +67,6 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>VolunteerNet</h2>
-        <a href="#">Dashboard</a>
         <a href="#">Events</a>
         <a href="{{ route('feedback.create') }}">Feedback</a>
         <a href="#">Users</a>
@@ -101,9 +100,13 @@
                         <label for="event_id" class="form-label">Pilih Event</label>
                         <select name="event_id" id="event_id" class="form-select" required>
                             <option value="">-- Pilih Event --</option>
-                            @foreach($events as $event)
-                                <option value="{{ $event->id }}">{{ $event->name }}</option>
-                            @endforeach
+                            @if($events->isEmpty())
+                                <option disabled>No events available</option>
+                            @else
+                                @foreach($events as $event)
+                                    <option value="{{ $event->id }}">{{ $event->name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
 

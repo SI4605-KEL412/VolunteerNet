@@ -63,7 +63,6 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>VolunteerNet</h2>
-        <a href="#">Dashboard</a>
         <a href="#">Events</a>
         <a href="{{ route('feedback.index') }}">Feedback</a>
         <a href="#">Users</a>
@@ -80,6 +79,16 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
+                <!-- Tombol Kembali ke Dashboard -->
+                <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}" class="btn btn-secondary mb-3">
+                    ← Kembali ke Dashboard
+                </a>
+
+                <!-- Tombol untuk Tambah Feedback -->
+                <a href="{{ route('feedback.create') }}" class="btn btn-primary mb-3">
+                    Tambah Feedback
+                </a>
+
                 <table class="table table-bordered table-hover bg-white">
                     <thead class="table-light">
                         <tr>
@@ -93,25 +102,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($feedbacks as $feedback)
+                        @forelse($feedbacks as $feedback)
                         <tr>
-                            <td>{{ $feedback->id }}</td>
+                            <td>{{ $feedback->id ?? 'N/A' }}</td>
                             <td>{{ $feedback->event->name ?? 'Event #' . $feedback->event_id }}</td>
                             <td>{{ $feedback->user->name ?? 'User #' . $feedback->user_id }}</td>
                             <td>{{ $feedback->rating }}</td>
                             <td>{{ $feedback->comments }}</td>
                             <td>{{ $feedback->date_given }}</td>
                             <td>
-                                <a href="{{ route('feedback.show', $feedback->id) }}" class="btn btn-sm btn-info">Lihat</a>
-                                <a href="{{ route('feedback.edit', $feedback->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('feedback.destroy', $feedback->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
-                                </form>
+                                @if($feedback->id)
+                                    <a href="{{ route('feedback.show', $feedback->id) }}" class="btn btn-sm btn-info">Lihat</a>
+                                    <a href="{{ route('feedback.edit', $feedback->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('feedback.destroy', $feedback->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
+                                    </form>
+                                @else
+                                    <span class="text-muted">ID tidak tersedia</span>
+                                @endif
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center">Belum ada data feedback.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
 

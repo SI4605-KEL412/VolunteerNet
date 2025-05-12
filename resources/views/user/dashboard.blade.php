@@ -63,7 +63,7 @@
                 <a class="nav-link" href="#">Activities</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Feedback</a>
+                <a class="nav-link" href="{{ route('feedback.index') }}">Feedback</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Build Portfolio</a>

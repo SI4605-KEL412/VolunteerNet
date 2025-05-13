@@ -31,9 +31,12 @@
             margin-bottom: 20px;
             font-size: 1.1rem;
             transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 6px;
         }
 
         .sidebar a:hover {
+            background-color: #1565c0;
             color: #bbdefb;
         }
 
@@ -63,10 +66,14 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>VolunteerNet</h2>
-        <a href="#">Events</a>
-        <a href="{{ route('feedback.index') }}">Feedback</a>
-        <a href="#">Users</a>
-        <a href="#">Settings</a>
+
+        <!-- Menu Navigasi -->
+        <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}">
+            ← Dashboard
+        </a>
+
+        <a href="{{ route('feedback.create') }}">➕ Buat Feedback</a>
+        <a href="{{ route('feedback.index') }}">📄 Lihat Daftar Feedback</a>
     </div>
 
     <!-- Main Content -->
@@ -78,16 +85,6 @@
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
-
-                <!-- Tombol Kembali ke Dashboard -->
-                <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}" class="btn btn-secondary mb-3">
-                    ← Kembali ke Dashboard
-                </a>
-
-                <!-- Tombol untuk Tambah Feedback -->
-                <a href="{{ route('feedback.create') }}" class="btn btn-primary mb-3">
-                    Tambah Feedback
-                </a>
 
                 <table class="table table-bordered table-hover bg-white">
                     <thead class="table-light">
@@ -111,10 +108,10 @@
                             <td>{{ $feedback->comments }}</td>
                             <td>{{ $feedback->date_given }}</td>
                             <td>
-                                @if($feedback->id)
-                                    <a href="{{ route('feedback.show', $feedback->id) }}" class="btn btn-sm btn-info">Lihat</a>
-                                    <a href="{{ route('feedback.edit', $feedback->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('feedback.destroy', $feedback->id) }}" method="POST" style="display:inline;">
+                                @if($feedback->feedback_id)
+                                    <a href="{{ route('feedback.show', $feedback->feedback_id) }}" class="btn btn-sm btn-info">Lihat</a>
+                                    <a href="{{ route('feedback.edit', $feedback->feedback_id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('feedback.destroy', $feedback->feedback_id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>

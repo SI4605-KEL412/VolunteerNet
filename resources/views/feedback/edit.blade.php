@@ -60,8 +60,18 @@
 </head>
 <body>
 
-    <!-- Navbar -->
-    @include('navbar')
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>VolunteerNet</h2>
+
+        <!-- Menu Navigasi -->
+        <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}">
+            ← Dashboard
+        </a>
+
+        <a href="{{ route('feedback.create') }}">➕ Buat Feedback</a>
+        <a href="{{ route('feedback.index') }}">📄 Lihat Daftar Feedback</a>
+    </div>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -79,24 +89,19 @@
                     </div>
                 @endif
 
-                <form action="{{ route('feedback.update', $feedback->id) }}" method="POST">
+                <form action="{{ route('feedback.update', $feedback->feedback_id) }}" method="POST">
                     @csrf
                     @method('PUT')
-
+                    
                     <div class="mb-3">
-                        <label for="user_id" class="form-label">User ID</label>
-                        <input type="number" class="form-control" name="user_id" id="user_id" value="{{ old('user_id', $feedback->user_id) }}" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="event_id" class="form-label">Event</label>
-                        <select class="form-control" name="event_id" id="event_id" required>
-                            <option value="">Select Event</option>
-                            @foreach($events as $event)
-                                <option value="{{ $event->id }}" {{ old('event_id', $feedback->event_id) == $event->id ? 'selected' : '' }}>
-                                    {{ $event->name }} ({{ $event->date }})
-                                </option>
-                            @endforeach
+                        <label for="event_id" class="form-label">Pilih Event</label>
+                        <select name="event_id" id="event_id" class="form-select" required>
+                            <option value="">-- Pilih Event --</option>
+                            @forelse($events as $event)
+                                <option value="{{ $event->event_id }}">{{ $event->title }}</option>
+                            @empty
+                                <option disabled>No events available</option>
+                            @endforelse
                         </select>
                     </div>
 
@@ -112,7 +117,7 @@
 
                     <div class="mb-3">
                         <label for="date_given" class="form-label">Tanggal Diberikan</label>
-                        <input type="datetime-local" class="form-control" name="date_given" id="date_given" value="{{ old('date_given', $feedback->date_given->format('Y-m-d\TH:i')) }}" required>
+                        <input type="datetime-local" class="form-control" name="date_given" id="date_given" value="{{ old('date_given', $feedback->date_given ? $feedback->date_given : '') }}" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary mt-3">Update Feedback</button>

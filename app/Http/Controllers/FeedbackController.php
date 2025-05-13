@@ -71,7 +71,7 @@ class FeedbackController extends Controller
         $feedback = Feedback::findOrFail($id);
 
         $validated = $request->validate([
-            'event_id'   => 'required|exists:events,id',
+            'event_id'   => 'required|exists:event,event_id',
             'rating'     => 'required|numeric|min:0|max:5',
             'comments'   => 'nullable|string|max:500',
             'date_given' => 'required|date',

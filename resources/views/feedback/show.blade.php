@@ -59,11 +59,14 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>VolunteerNet</h2>
-        <a href="#">Dashboard</a>
-        <a href="#">Events</a>
-        <a href="#">Feedback</a>
-        <a href="#">Users</a>
-        <a href="#">Settings</a>
+
+        <!-- Menu Navigasi -->
+        <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}">
+            ← Dashboard
+        </a>
+
+        <a href="{{ route('feedback.create') }}">➕ Buat Feedback</a>
+        <a href="{{ route('feedback.index') }}">📄 Lihat Daftar Feedback</a>
     </div>
 
     <!-- Main Content -->

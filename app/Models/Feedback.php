@@ -19,6 +19,8 @@ class Feedback extends Model
 
     public $timestamps = false;
 
+    protected $primaryKey = 'feedback_id';
+
     /**
      * Relasi ke User (feedback diberikan oleh user tertentu)
      */

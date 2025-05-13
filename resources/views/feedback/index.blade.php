@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Daftar Feedback</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,27 +18,41 @@
             padding: 30px 20px;
             position: fixed;
             width: 250px;
+            transition: all 0.3s;
         }
 
         .sidebar h2 {
             font-size: 1.5rem;
             margin-bottom: 40px;
+            font-weight: bold;
         }
 
         .sidebar a {
-            display: block;
+            display: flex;
+            align-items: center;
             color: #fff;
             text-decoration: none;
             margin-bottom: 20px;
             font-size: 1.1rem;
-            transition: 0.3s;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            transition: 0.3s ease-in-out;
         }
 
         .sidebar a:hover {
-            background-color: #1565c0;
-            color: #bbdefb;
+            background-color: #bbdefb;
+            color: #0d47a1;
+            transform: scale(1.05);
+        }
+
+        .sidebar a .icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .sidebar a.active {
+            background-color: #bbdefb;
+            color: #0d47a1;
         }
 
         .main-content {
@@ -59,6 +74,36 @@
         .alert {
             border-radius: 12px;
         }
+
+        .btn-lihat {
+            background-color: #0d47a1;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: #F0DE36;
+            color: black;
+        }
+
+        .btn-hapus {
+            background-color: #D71313;
+            color: white;
+        }
+
+        .btn-lihat:hover {
+            background-color: #093170;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #e4ce3c;
+            color: black;
+        }
+
+        .btn-hapus:hover {
+            background-color: #b01010;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -67,13 +112,17 @@
     <div class="sidebar">
         <h2>VolunteerNet</h2>
 
-        <!-- Menu Navigasi -->
-        <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}">
-            ← Dashboard
+        <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}" class="{{ request()->routeIs('admin.dashboard') || request()->routeIs('dashboardEO') || request()->routeIs('user.dashboard') ? 'active' : '' }}">
+            <i class="fas fa-arrow-left icon"></i> Dashboard
         </a>
 
-        <a href="{{ route('feedback.create') }}">➕ Buat Feedback</a>
-        <a href="{{ route('feedback.index') }}">📄 Lihat Daftar Feedback</a>
+        <a href="{{ route('feedback.create') }}" class="{{ request()->routeIs('feedback.create') ? 'active' : '' }}">
+            <i class="fas fa-plus-circle icon"></i> Buat Feedback
+        </a>
+
+        <a href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'active' : '' }}">
+            <i class="fas fa-file-alt icon"></i> Lihat Daftar Feedback
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -109,12 +158,12 @@
                             <td>{{ $feedback->date_given }}</td>
                             <td>
                                 @if($feedback->feedback_id)
-                                    <a href="{{ route('feedback.show', $feedback->feedback_id) }}" class="btn btn-sm btn-info">Lihat</a>
-                                    <a href="{{ route('feedback.edit', $feedback->feedback_id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="{{ route('feedback.show', $feedback->feedback_id) }}" class="btn btn-sm btn-lihat">Lihat</a>
+                                    <a href="{{ route('feedback.edit', $feedback->feedback_id) }}" class="btn btn-sm btn-edit">Edit</a>
                                     <form action="{{ route('feedback.destroy', $feedback->feedback_id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-hapus" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
                                     </form>
                                 @else
                                     <span class="text-muted">ID tidak tersedia</span>

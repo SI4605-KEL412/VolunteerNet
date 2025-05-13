@@ -17,12 +17,14 @@ class Feedback extends Model
         'date_given',
     ];
 
+    public $timestamps = false;
+
     /**
      * Relasi ke User (feedback diberikan oleh user tertentu)
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
     /**
@@ -30,6 +32,6 @@ class Feedback extends Model
      */
     public function event()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Event::class, 'event_id', 'event_id');
     }
 }

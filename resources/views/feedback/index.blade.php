@@ -104,8 +104,8 @@
                     <tbody>
                         @forelse($feedbacks as $feedback)
                         <tr>
-                            <td>{{ $feedback->id ?? 'N/A' }}</td>
-                            <td>{{ $feedback->event->name ?? 'Event #' . $feedback->event_id }}</td>
+                            <td>{{ $feedback->event_id }}</td>
+                            <td>{{ $feedback->event->title ?? 'Event #' . $feedback->event_id }}</td>
                             <td>{{ $feedback->user->name ?? 'User #' . $feedback->user_id }}</td>
                             <td>{{ $feedback->rating }}</td>
                             <td>{{ $feedback->comments }}</td>

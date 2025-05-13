@@ -57,6 +57,13 @@
             font-size: 1rem;
         }
 
+        .btn-secondary, .btn-info {
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
         .alert {
             border-radius: 12px;
         }
@@ -100,13 +107,11 @@
                         <label for="event_id" class="form-label">Pilih Event</label>
                         <select name="event_id" id="event_id" class="form-select" required>
                             <option value="">-- Pilih Event --</option>
-                            @if($events->isEmpty())
+                            @forelse($events as $event)
+                                <option value="{{ $event->event_id }}">{{ $event->title }}</option>
+                            @empty
                                 <option disabled>No events available</option>
-                            @else
-                                @foreach($events as $event)
-                                    <option value="{{ $event->id }}">{{ $event->name }}</option>
-                                @endforeach
-                            @endif
+                            @endforelse
                         </select>
                     </div>
 
@@ -126,6 +131,12 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary mt-3">Kirim Feedback</button>
+
+                    <!-- Tombol Kembali ke Dashboard -->
+                    <a href="{{ url('/dashboard') }}" class="btn btn-secondary">Kembali ke Dashboard</a>
+
+                    <!-- Tombol Lihat Daftar Feedback -->
+                    <a href="{{ route('feedback.index') }}" class="btn btn-info">Lihat Daftar Feedback</a>
                 </form>
             </div>
         </div>

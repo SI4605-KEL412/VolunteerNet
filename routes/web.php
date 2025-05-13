@@ -53,10 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
 
     // Menampilkan form create feedback dengan list event
-    Route::get('feedback/create', function () {
-        $events = \App\Models\Event::all();
-        return view('feedback.create', compact('events'));
-    })->name('feedback.create');
+    Route::get('feedback/create', [FeedbackController::class, 'create'])->name('feedback.create');
 
     Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
     Route::get('feedback/{id}', [FeedbackController::class, 'show'])->name('feedback.show');

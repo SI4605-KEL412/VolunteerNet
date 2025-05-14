@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\manageUserController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\PortfolioController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -51,4 +53,14 @@ Route::middleware('auth')->group(function () {
     Route::get('manageusers/{id}/edit', [manageUserController::class, 'edit'])->name('manageusers.edit'); // Halaman edit user
     Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update'); // Proses update user
     Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy'); // Hapus user
+
+    //Portfolio
+    Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index'); // Read
+    Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create'); // Create Form
+    Route::post('/portfolio', [PortfolioController::class, 'store'])->name('portfolio.store'); // Store Create
+    Route::get('/portfolio/{id}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit'); // Edit Form
+    Route::put('/portfolio/{id}', [PortfolioController::class, 'update'])->name('portfolio.update'); // Update
+    Route::delete('/portfolio/{id}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy'); // Delete
 });
+
+Route::get('activities', [ActivityController::class, 'index'])->name('activities.index');

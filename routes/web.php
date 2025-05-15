@@ -45,8 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::put('events/{id}', [EventController::class, 'update'])->name('events.update'); // Proses update event
     Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy'); // Hapus event
 
-
-    //Manage User
+    // Manage User
     Route::get('manageusers', [manageUserController::class, 'index'])->name('manageusers.index'); // Daftar semua user
     Route::get('manageusers/{id}', [manageUserController::class, 'show'])->name('manageusers.show'); // Lihat detail user
     Route::get('manageusers/{id}/edit', [manageUserController::class, 'edit'])->name('manageusers.edit'); // Halaman edit user

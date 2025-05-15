@@ -60,13 +60,13 @@
         </div>
         <ul class="nav flex-column p-3">
             <li class="nav-item">
-                <a class="nav-link" href="#">Activities</a>
+                <a class="nav-link" href="{{ route('activities.index') }}">Activities</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Feedback</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Build Portfolio</a>
+                <a class="nav-link" href="{{ route('portfolio.index') }}">Build Portfolio</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('user.notifications.index') }}">Notification</a>

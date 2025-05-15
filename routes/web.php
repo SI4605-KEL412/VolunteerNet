@@ -7,6 +7,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\manageUserController;
 use App\Http\Controllers\UserNotificationController;
 use App\Http\Controllers\AdminNotificationController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\PortfolioController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -60,10 +62,21 @@ Route::middleware('auth')->group(function () {
     Route::put('events/{id}', [EventController::class, 'update'])->name('events.update'); // Proses update event
     Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy'); // Hapus event
 
-     //Manage User
+    // Manage User
     Route::get('manageusers', [manageUserController::class, 'index'])->name('manageusers.index'); // Daftar semua user
     Route::get('manageusers/{id}', [manageUserController::class, 'show'])->name('manageusers.show'); // Lihat detail user
     Route::get('manageusers/{id}/edit', [manageUserController::class, 'edit'])->name('manageusers.edit'); // Halaman edit user
     Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update'); // Proses update user
     Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy'); // Hapus user
+
+    //Portfolio
+    Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index'); // Read
+    Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create'); // Create Form
+    Route::post('/portfolio', [PortfolioController::class, 'store'])->name('portfolio.store'); // Store Create
+    Route::get('/portfolio/{id}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit'); // Edit Form
+    Route::put('/portfolio/{id}', [PortfolioController::class, 'update'])->name('portfolio.update'); // Update
+    Route::delete('/portfolio/{id}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy'); // Delete
 });
+
+// Route untuk activities yang bisa diakses tanpa auth middleware
+Route::get('activities', [ActivityController::class, 'index'])->name('activities.index');

@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EO Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EO Dashboard - User Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
     <style>
         body {
             background: linear-gradient(to bottom, #0066cc, #f0f8ff);
@@ -51,6 +51,7 @@
 
         .content {
             margin-left: 250px;
+            padding-top: 20px;
         }
 
         .summary-cards {
@@ -80,7 +81,6 @@
         </ul>
     </div>
 
-
     <!-- Main Content -->
     <div class="content">
         <div class="container">
@@ -100,9 +100,7 @@
                                 <i class="fas fa-user text-white" style="font-size: 50px;"></i>
                             </div>
                             <h4>{{ $user->name }}</h4>
-                            <span class="badge bg-primary">
-                                {{ ucfirst($user->role) }}
-                            </span>
+                            <span class="badge bg-primary">{{ ucfirst($user->role) }}</span>
                         </div>
                         <div class="col-md-9">
                             <div class="card mb-3">
@@ -144,8 +142,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
-```

@@ -74,6 +74,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('events.index') }}">Manage Events</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.notifications.index') }}">Manage Notification</a>
+            </li>
         </ul>
     </div>
 

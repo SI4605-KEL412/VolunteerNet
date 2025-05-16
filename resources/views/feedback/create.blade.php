@@ -78,6 +78,29 @@
         .alert {
             border-radius: 12px;
         }
+
+        .star-rating {
+            direction: rtl;
+            display: inline-flex;
+            justify-content: center;
+            gap: 5px;
+            font-size: 2rem;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc107;
+        }
     </style>
 </head>
 <body>
@@ -135,9 +158,14 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">Rating (0 - 5)</label>
-                        <input type="number" step="0.01" min="0" max="5" class="form-control" name="rating" id="rating" required>
+                    <div class="mb-3 text-center">
+                        <label class="form-label d-block">Rating</label>
+                        <div class="star-rating mx-auto">
+                            @for ($i = 5; $i >= 1; $i--)
+                                <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}">
+                                <label for="star{{ $i }}"><i class="fas fa-star"></i></label>
+                            @endfor
+                        </div>
                     </div>
 
                     <div class="mb-3">

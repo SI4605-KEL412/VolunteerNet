@@ -65,6 +65,15 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
 
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
         .btn {
             border-radius: 10px;
             padding: 6px 14px;
@@ -135,48 +144,54 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <table class="table table-bordered table-hover bg-white">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Event</th>
-                            <th>User</th>
-                            <th>Rating</th>
-                            <th>Komentar</th>
-                            <th>Tanggal</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($feedbacks as $feedback)
-                        <tr>
-                            <td>{{ $feedback->event_id }}</td>
-                            <td>{{ $feedback->event->title ?? 'Event #' . $feedback->event_id }}</td>
-                            <td>{{ $feedback->user->name ?? 'User #' . $feedback->user_id }}</td>
-                            <td>{{ $feedback->rating }}</td>
-                            <td>{{ $feedback->comments }}</td>
-                            <td>{{ $feedback->date_given }}</td>
-                            <td>
-                                @if($feedback->feedback_id)
-                                    <a href="{{ route('feedback.show', $feedback->feedback_id) }}" class="btn btn-sm btn-lihat">Lihat</a>
-                                    <a href="{{ route('feedback.edit', $feedback->feedback_id) }}" class="btn btn-sm btn-edit">Edit</a>
-                                    <form action="{{ route('feedback.destroy', $feedback->feedback_id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-hapus" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
-                                    </form>
-                                @else
-                                    <span class="text-muted">ID tidak tersedia</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="7" class="text-center">Belum ada data feedback.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover bg-white align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Event</th>
+                                <th>User</th>
+                                <th>Rating</th>
+                                <th>Komentar</th>
+                                <th>Tanggal</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($feedbacks as $feedback)
+                            <tr>
+                                <td>{{ $feedback->event_id }}</td>
+                                <td>{{ $feedback->event->title ?? 'Event #' . $feedback->event_id }}</td>
+                                <td>{{ $feedback->user->name ?? 'User #' . $feedback->user_id }}</td>
+                                <td>
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <i class="fas fa-star{{ $i <= $feedback->rating ? ' text-warning' : ' text-secondary' }}"></i>
+                                    @endfor
+                                </td>
+                                <td>{{ $feedback->comments }}</td>
+                                <td>{{ \Carbon\Carbon::parse($feedback->date_given)->format('d M Y H:i') }}</td>
+                                <td class="text-center">
+                                    @if($feedback->feedback_id)
+                                        <a href="{{ route('feedback.show', $feedback->feedback_id) }}" class="btn btn-sm btn-lihat mb-1">Lihat</a>
+                                        <a href="{{ route('feedback.edit', $feedback->feedback_id) }}" class="btn btn-sm btn-edit mb-1">Edit</a>
+                                        <form action="{{ route('feedback.destroy', $feedback->feedback_id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-hapus" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
+                                        </form>
+                                    @else
+                                        <span class="text-muted">ID tidak tersedia</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">Belum ada data feedback.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         </div>

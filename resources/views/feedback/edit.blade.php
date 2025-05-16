@@ -69,8 +69,21 @@
             font-weight: 600;
         }
 
-        .btn-kembali {
+        .btn-primary-custom {
             background-color: #0d47a1;
+            color: white;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #093170;
+            color: white;
+        }
+
+        .btn-kembali {
+            background-color: #6c757d;
             color: white;
             border-radius: 12px;
             padding: 10px 20px;
@@ -79,8 +92,37 @@
         }
 
         .btn-kembali:hover {
-            background-color: #093170;
+            background-color: #5a6268;
             color: white;
+        }
+
+        .alert {
+            border-radius: 12px;
+        }
+
+        /* Styling untuk rating bintang */
+        .star-rating {
+            direction: rtl; /* Bintang kanan = 1 */
+            font-size: 2rem;
+            unicode-bidi: bidi-override;
+            display: inline-flex;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 4px;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #ffc107;
         }
     </style>
 </head>
@@ -134,14 +176,19 @@
                             @forelse($events as $event)
                                 <option value="{{ $event->event_id }}" {{ $feedback->event_id == $event->event_id ? 'selected' : '' }}>{{ $event->title }}</option>
                             @empty
-                                <option disabled>No events available</option>
+                                <option disabled>Tidak ada event tersedia</option>
                             @endforelse
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="rating" class="form-label">Rating (0 - 5)</label>
-                        <input type="number" step="0.01" min="0" max="5" class="form-control" name="rating" id="rating" value="{{ old('rating', $feedback->rating) }}" required>
+                        <label for="rating" class="form-label">Rating</label>
+                        <div class="star-rating">
+                            @for ($i = 5; $i >= 1; $i--)
+                                <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" {{ old('rating', $feedback->rating) == $i ? 'checked' : '' }} />
+                                <label for="star{{ $i }}" title="{{ $i }} stars"><i class="fas fa-star"></i></label>
+                            @endfor
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -154,7 +201,10 @@
                         <input type="datetime-local" class="form-control" name="date_given" id="date_given" value="{{ old('date_given', $feedback->date_given) }}" required>
                     </div>
 
-                    <button type="submit" class="btn btn-kembali mt-3">Update Feedback</button>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('feedback.index') }}" class="btn btn-kembali">Kembali</a>
+                        <button type="submit" class="btn btn-primary-custom">Update Feedback</button>
+                    </div>
                 </form>
             </div>
         </div>

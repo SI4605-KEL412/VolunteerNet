@@ -78,6 +78,16 @@
             background-color: #093170;
             color: white;
         }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .star-rating {
+            color: #ffc107;
+            font-size: 1.4rem;
+        }
     </style>
 </head>
 <body>
@@ -86,7 +96,6 @@
     <div class="sidebar">
         <h2>VolunteerNet</h2>
 
-        <!-- Menu Navigasi -->
         <a href="{{ route(Auth::user()->role == 'admin' ? 'admin.dashboard' : (Auth::user()->role == 'eo' ? 'dashboardEO' : 'user.dashboard')) }}" class="{{ request()->routeIs('admin.dashboard') || request()->routeIs('dashboardEO') || request()->routeIs('user.dashboard') ? 'active' : '' }}">
             <i class="fas fa-arrow-left icon"></i> Dashboard
         </a>
@@ -107,31 +116,50 @@
                 <h3 class="mb-4 text-primary">Detail Feedback</h3>
 
                 <div class="mb-3">
-                    <label class="form-label">User ID</label>
-                    <p>{{ $feedback->user_id }}</p>
+                    <label class="form-label">Nama Volunteer</label>
+                    <p>{{ $feedback->user->name ?? 'Tidak diketahui' }}</p>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Event ID</label>
-                    <p>{{ $feedback->event_id }}</p>
+                    <label class="form-label">Nama Event</label>
+                    <p>{{ $feedback->event->title ?? 'Tidak diketahui' }}</p>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Rating</label>
-                    <p>{{ $feedback->rating }}</p>
+                    <p class="star-rating">
+                        @php
+                            $rating = $feedback->rating;
+                            $fullStars = floor($rating);
+                            $halfStar = ($rating - $fullStars) >= 0.5 ? true : false;
+                            $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+                        @endphp
+
+                        @for ($i = 0; $i < $fullStars; $i++)
+                            <i class="fas fa-star"></i>
+                        @endfor
+
+                        @if ($halfStar)
+                            <i class="fas fa-star-half-alt"></i>
+                        @endif
+
+                        @for ($i = 0; $i < $emptyStars; $i++)
+                            <i class="far fa-star"></i>
+                        @endfor
+                    </p>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Komentar</label>
-                    <p>{{ $feedback->comments }}</p>
+                    <p>{{ $feedback->comments ?: '-' }}</p>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Tanggal Diberikan</label>
-                    <p>{{ $feedback->date_given }}</p>
+                    <p>{{ \Carbon\Carbon::parse($feedback->date_given)->format('d M Y, H:i') }}</p>
                 </div>
 
-                <a href="{{ route('feedback.index') }}" class="btn btn-kembali">← Kembali ke Daftar Feedback</a>
+                <a href="{{ route('feedback.index') }}" class="btn btn-kembali mt-3">← Kembali ke Daftar Feedback</a>
             </div>
         </div>
     </div>

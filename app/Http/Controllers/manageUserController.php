@@ -27,7 +27,7 @@ class manageUserController extends Controller
         if ($katakunci) {
             $query->where(function($q) use ($katakunci) {
                 $q->where('name', 'LIKE', "%{$katakunci}%")
-                ->orWhere('email', 'LIKE', "%{$katakunci}%");
+                  ->orWhere('email', 'LIKE', "%{$katakunci}%");
             });
         }
 
@@ -112,8 +112,11 @@ class manageUserController extends Controller
     /**
      * Update the specified user in storage
      *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-      public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $user = manageUser::findOrFail($id);
 
@@ -124,8 +127,8 @@ class manageUserController extends Controller
                 'email',
                 Rule::unique('users', 'email')->ignore($user->user_id, 'user_id'),
             ],
-            'role' => 'required|in:admin,user,editor', // Allow all valid roles
-            'profile_detail' => 'nullable|string', // Match form field name
+            'role' => 'required|in:admin,user,editor',
+            'profile_detail' => 'nullable|string',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -140,13 +143,10 @@ class manageUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'profiledetails' => $request->profile_detail, // Match DB field name while accepting form field name
+            'profiledetails' => $request->profile_detail,
+            'updated_at' => now(),
         ];
 
-        // Force updated_at to change even if no fields were actually changed
-        $userData['updated_at'] = now();
-
-        // Update the user
         $user->update($userData);
 
         // Store the updated user ID in the session

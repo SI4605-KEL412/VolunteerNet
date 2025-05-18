@@ -53,10 +53,7 @@
             margin-left: 250px;
         }
 
-        .summary-cards {
-            padding: 20px;
-        }
-
+        .summary-cards,
         .events-section {
             padding: 20px;
         }
@@ -72,19 +69,22 @@
         </div>
         <ul class="nav flex-column p-3">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('manageusers.index') }}" href="#">Manage Users</a>
+                <a class="nav-link" href="{{ route('manageusers.index') }}">Manage Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Manage Events</a>
+                <a class="nav-link" href="{{ route('events.index') }}">Manage Events</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.notifications.index') }}">Manage Notification</a>
             </li>
         </ul>
     </div>
 
-      <!-- Main Content -->
+    <!-- Main Content -->
     <div class="content">
         <!-- Hero Section -->
         <div class="hero">
-            <h1 class="mb-3">Welcome! ,</h1>
+            <h1 class="mb-3">Welcome!</h1>
             <p class="mb-4">This is your dashboard Eo</p>
             <a href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -95,6 +95,7 @@
                 @csrf
             </form>
         </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

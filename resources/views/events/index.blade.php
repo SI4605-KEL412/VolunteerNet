@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Daftar Event</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css  ">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
         body {
             background: linear-gradient(to bottom, #0066cc, #f0f8ff);
@@ -45,59 +45,60 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             margin-bottom: 25px;
         }
-        
+
         .card {
             height: 100%;
             transition: transform 0.3s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             margin-bottom: 20px;
+            position: relative;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
         }
-        
+
         .card-header {
             font-weight: bold;
             background-color: #f8f9fa;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        
+
         .card-footer {
             background-color: #f8f9fa;
             padding: 10px;
         }
-        
+
         .event-status {
             position: absolute;
             top: 10px;
             right: 10px;
+            z-index: 10;
         }
-        
+
         .event-date {
             font-size: 0.9rem;
             color: #6c757d;
         }
-        
-        .badge {
-            font-size: 0.85rem;
-            padding: 0.5em 0.7em;
-        }
-        
+
         .action-buttons form {
             display: inline;
         }
-        
+
         .action-buttons .btn {
             margin-right: 3px;
             margin-bottom: 5px;
         }
-        
+
         .no-events {
             background-color: white;
             border-radius: 6px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 40px;
             text-align: center;
+            color: #6c757d;
         }
     </style>
 </head>
@@ -106,7 +107,6 @@
     <div class="sidebar">
         <div class="d-flex justify-content-between align-items-center p-3">
             <a class="nav-link active text-white fs-4 fw-bold" href="{{ route('admin.dashboard') }}">Dashboard</a>
-            {{-- <span class="text-white fs-4 fw-bold">Dashboard</span> --}}
         </div>
         <ul class="nav flex-column p-3">
             <li class="nav-item">
@@ -139,7 +139,7 @@
                 <div class="row row-cols-1 row-cols-md-3 g-4">
                     @foreach($events as $event)
                         <div class="col">
-                            <div class="card h-100 position-relative">
+                            <div class="card h-100">
                                 <div class="event-status">
                                     @if ($event->status == 'pending')
                                         <span class="badge bg-warning text-dark">
@@ -187,9 +187,7 @@
                 </div>
             @else
                 <div class="no-events">
-                    <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
-                    <h4 class="text-muted">Tidak ada event ditemukan</h4>
-                    <p class="text-muted">Silakan buat event baru dengan mengklik tombol "Buat Event Baru"</p>
+                    <i class="fas fa-info-circle me-2"></i> Tidak ada event ditemukan.
                 </div>
             @endif
         </div>
@@ -197,7 +195,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize tooltips
+        // Initialize Bootstrap tooltips
         document.addEventListener('DOMContentLoaded', function() {
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

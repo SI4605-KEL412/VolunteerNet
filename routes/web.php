@@ -9,6 +9,7 @@ use App\Http\Controllers\UserNotificationController;
 use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\FeedbackController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -26,13 +27,13 @@ Route::post('login', [AuthController::class, 'login']);
 // Logout
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Hanya bisa diakses jika sudah login
+// Rute yang hanya bisa diakses jika sudah login
 Route::middleware('auth')->group(function () {
 
-    // Dashboard untuk User (Volunteer)
+    // Dashboard untuk User
     Route::get('dashboard/user', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
 
-     // User Notifications routes
+    // User Notifications routes
     Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications.index');
     Route::post('/user/notifications/{id}/read', [UserNotificationController::class, 'markAsRead'])->name('user.notifications.read');
     Route::post('/user/notifications/read-all', [UserNotificationController::class, 'markAllAsRead'])->name('user.notifications.read.all');
@@ -42,10 +43,10 @@ Route::middleware('auth')->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-    // Dashboard untuk Event Organizer (EO)
+    // Dashboard untuk EO
     Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('dashboardEO');
 
-     // Admin Notifications routes
+    // Admin Notifications routes
     Route::get('/admin/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
     Route::get('/admin/notifications/create', [AdminNotificationController::class, 'create'])->name('admin.notifications.create');
     Route::post('/admin/notifications', [AdminNotificationController::class, 'store'])->name('admin.notifications.store');
@@ -69,13 +70,23 @@ Route::middleware('auth')->group(function () {
     Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update'); // Proses update user
     Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy'); // Hapus user
 
-    //Portfolio
+    // Portfolio
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index'); // Read
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create'); // Create Form
     Route::post('/portfolio', [PortfolioController::class, 'store'])->name('portfolio.store'); // Store Create
     Route::get('/portfolio/{id}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit'); // Edit Form
     Route::put('/portfolio/{id}', [PortfolioController::class, 'update'])->name('portfolio.update'); // Update
     Route::delete('/portfolio/{id}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy'); // Delete
+
+    // Feedback
+    Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+    Route::get('feedback/create', [FeedbackController::class, 'create'])->name('feedback.create');
+    Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+    Route::get('feedback/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+    Route::get('feedback/{id}/edit', [FeedbackController::class, 'edit'])->name('feedback.edit');
+    Route::put('feedback/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
+    Route::delete('feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+
 });
 
 // Route untuk activities yang bisa diakses tanpa auth middleware

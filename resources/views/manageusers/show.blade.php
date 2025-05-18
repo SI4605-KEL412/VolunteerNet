@@ -128,7 +128,7 @@
                                     <h5 class="mb-0">Profile Details</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="profiledetails">{{ $user->profiledetails ?: 'No profile details provided.' }}</p>
+                                    <p class="profiledetails">{{ $user->profile_detail ?: 'No profile details provided.' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
 
                     <div class="d-flex justify-content-end mt-3">
                         <a href="{{ route('manageusers.index') }}" class="btn btn-outline-secondary me-2">Back to List</a>
-                        <a href="{{ route('manageusers.edit', $user->user_id) }}" class="btn btn-primary">Edit User</a>
+                        <a href="{{ route('manageusers.edit', $user->id) }}" class="btn btn-primary">Edit User</a>
                     </div>
                 </div>
             </div>

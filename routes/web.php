@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\manageUserController;
+use App\Http\Controllers\ForumController;
+use App\Http\Controllers\CommentController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -51,4 +53,19 @@ Route::middleware('auth')->group(function () {
     Route::get('manageusers/{id}/edit', [manageUserController::class, 'edit'])->name('manageusers.edit'); // Halaman edit user
     Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update'); // Proses update user
     Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy'); // Hapus user
+
+       // Forum Routes
+    Route::get('forums', [ForumController::class, 'index'])->name('forums.index');
+    Route::get('forums/create', [ForumController::class, 'create'])->name('forums.create');
+    Route::post('forums', [ForumController::class, 'store'])->name('forums.store');
+    Route::get('forums/{forum}', [ForumController::class, 'show'])->name('forums.show');
+    Route::get('forums/{forum}/edit', [ForumController::class, 'edit'])->name('forums.edit');
+    Route::put('forums/{forum}', [ForumController::class, 'update'])->name('forums.update');
+    Route::delete('forums/{forum}', [ForumController::class, 'destroy'])->name('forums.destroy');
+
+    // Comment Routes
+    Route::post('forums/{forum}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });

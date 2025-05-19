@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ReferralController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -91,3 +92,11 @@ Route::middleware('auth')->group(function () {
 
 // Route untuk activities yang bisa diakses tanpa auth middleware
 Route::get('activities', [ActivityController::class, 'index'])->name('activities.index');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/referral', [ReferralController::class, 'index'])->name('referral.index');
+    Route::post('/referral/generate', [ReferralController::class, 'generate'])->name('referral.generate');
+
+    // Route untuk proses pencatatan referral (contoh user baru pakai kode referral)
+    Route::post('/referral/store', [ReferralController::class, 'storeReferral'])->name('referral.store');
+});

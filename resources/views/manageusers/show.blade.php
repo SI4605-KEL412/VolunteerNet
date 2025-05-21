@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>EO Dashboard - User Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EO Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(to bottom, #0066cc, #f0f8ff);
@@ -45,19 +45,15 @@
             color: white;
         }
 
-        .sidebar a.nav-link:hover {
+        .sidebar .nav-link:hover {
             background-color: #0056b3;
         }
 
         .content {
             margin-left: 250px;
-            padding-top: 20px;
         }
 
-        .summary-cards {
-            padding: 20px;
-        }
-
+        .summary-cards,
         .events-section {
             padding: 20px;
         }
@@ -76,25 +72,26 @@
                 <a class="nav-link" href="{{ route('manageusers.index') }}">Manage Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Manage Events</a>
+                <a class="nav-link" href="{{ route('events.index') }}">Manage Events</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.notifications.index') }}">Manage Notification</a>
             </li>
         </ul>
     </div>
 
     <!-- Main Content -->
     <div class="content">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="header d-flex justify-content-between align-items-center">
-                        <h1 class="fw-bold">User Details</h1>
-                    </div>
-                </div>
+        <div class="container-fluid py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="fw-bold mb-0">User Details</h1>
             </div>
 
+            <!-- User Profile Card -->
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="row mb-4">
+                        <!-- User Avatar and Name -->
                         <div class="col-md-3 text-center">
                             <div class="bg-secondary rounded-circle mb-3 d-flex justify-content-center align-items-center mx-auto" style="width: 120px; height: 120px;">
                                 <i class="fas fa-user text-white" style="font-size: 50px;"></i>
@@ -102,7 +99,10 @@
                             <h4>{{ $user->name }}</h4>
                             <span class="badge bg-primary">{{ ucfirst($user->role) }}</span>
                         </div>
+
+                        <!-- User Details -->
                         <div class="col-md-9">
+                            <!-- Basic Info -->
                             <div class="card mb-3">
                                 <div class="card-header bg-light">
                                     <h5 class="mb-0">User Information</h5>
@@ -123,6 +123,7 @@
                                 </div>
                             </div>
 
+                            <!-- Profile Details -->
                             <div class="card">
                                 <div class="card-header bg-light">
                                     <h5 class="mb-0">Profile Details</h5>
@@ -134,6 +135,7 @@
                         </div>
                     </div>
 
+                    <!-- Action Buttons -->
                     <div class="d-flex justify-content-end mt-3">
                         <a href="{{ route('manageusers.index') }}" class="btn btn-outline-secondary me-2">Back to List</a>
                         <a href="{{ route('manageusers.edit', $user->user_id) }}" class="btn btn-primary">Edit User</a>
@@ -143,8 +145,9 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
+    <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>

@@ -9,6 +9,7 @@ use App\Http\Controllers\UserNotificationController;
 use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\VolunFeedsController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -36,6 +37,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications.index');
     Route::post('/user/notifications/{id}/read', [UserNotificationController::class, 'markAsRead'])->name('user.notifications.read');
     Route::post('/user/notifications/read-all', [UserNotificationController::class, 'markAllAsRead'])->name('user.notifications.read.all');
+
+    // Volunfeeds
+    Route::get('/volunfeeds', [VolunFeedsController::class, 'index'])->name('volunfeeds.index');
+    Route::post('/volunfeeds/{id}/like', [VolunFeedsController::class, 'toggleLike'])->name('volunfeeds.toggle-like');
+    // View portfolio details
+    Route::get('/volunfeeds/{id}', [VolunFeedsController::class, 'show'])->name('volunfeeds.show');
+    // View user profile
+    Route::get('user/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('user.profile');
+    // Add new route for volunfeeds.profile
+    Route::get('/volunfeeds/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('volunfeeds.profile');
+    Route::get('/volunfeeds/my-portfolios', [App\Http\Controllers\VolunFeedsController::class, 'myPortfolios'])->name('volunfeeds.my-portfolios');
 
     // Dashboard untuk Admin
     Route::get('dashboard/admin', function () {

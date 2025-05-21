@@ -2,34 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bookmark;
 use App\Models\Event;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BookmarkController extends Controller
 {
-    // Untuk bookmark atau unbookmark event
-    public function toggle(Event $event)
-    {
-        $user = \App\Models\User::find(1);
-    
-        if ($user->bookmarkedEvents()->where('event_id', $event->id)->exists()) {
-            $user->bookmarkedEvents()->detach($event->id);
-            return back()->with('status', 'Bookmark dihapus.');
-        } else {
-            $user->bookmarkedEvents()->attach($event->id);
-            return back()->with('status', 'Event berhasil di-bookmark.');
-        }
-    }
-
-    // Untuk menampilkan halaman list bookmark
     public function index()
     {
-        $user = \App\Models\User::find(1); // Ganti dengan user yang kamu mau pakai untuk test
-        $bookmarkedEvents = $user->bookmarkedEvents()->latest()->get();
-    
-        return view('bookmarks.index', compact('bookmarkedEvents'));
+        $bookmarks = Bookmark::with('event') 
+            ->where('user_id', auth()->id())
+            ->get();
+        return view('bookmarks.index', compact('bookmarks'));
     }
-    
+
+    public function toggle(Event $event)
+    {
+        // Validasi event_id
+        if (!$event || !$event->id) {
+            return back()->with('error', 'Event tidak ditemukan.');
+        }
+
+        $bookmark = Bookmark::where('user_id', auth()->id())
+                           ->where('event_id', $event->id)
+                           ->first();
+
+        if ($bookmark) {
+            $bookmark->delete();
+            return back()->with('success', 'Event dihapus dari bookmark.');
+        }
+
+        // Pastikan semua data terisi
+        $data = [
+            'user_id' => auth()->id(),
+            'event_id' => $event->id,
+            'created_at' => now(),
+            'updated_at' => now()
+        ];
+
+        Bookmark::create($data);
+
+        return back()->with('success', 'Event berhasil ditambahkan ke bookmark.');
+    }
+
+    public function destroy(Bookmark $bookmark)
+    {
+        $bookmark->delete();
+        return redirect()->route('bookmarks.index')
+                        ->with('success', 'Bookmark berhasil dihapus.');
+    }
 }
     

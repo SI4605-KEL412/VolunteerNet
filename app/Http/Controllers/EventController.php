@@ -8,16 +8,16 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan semua event.
      */
     public function index()
     {
-        $events = Event::latest()->get();
+        $events = Event::all();
         return view('events.index', compact('events'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan form pembuatan event baru.
      */
     public function create()
     {
@@ -25,76 +25,101 @@ class EventController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan event baru ke database.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'location' => 'required',
-            'date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'location' => 'nullable|string|max:255',
+            'status' => 'nullable|in:pending,approved,rejected',
+            'organizer_id' => 'nullable|integer',
         ]);
 
-        $imagePath = $request->file('image')?->store('events', 'public');
+        Event::create($request->all());
 
-        Event::create([
-            'title' => $request->title,
-            'location' => $request->location,
-            'date' => $request->date,
-            'description' => $request->description,
-            'status' => $request->status ?? 'Active',
-            'image' => $imagePath,
-        ]);
-
-        return redirect()->route('events.index')->with('success', 'Event created!');
+        return redirect()->route('events.index')->with('success', 'Event berhasil dibuat.');
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail event.
      */
-    public function show(Event $event)
-{
-    return view('events.show', compact('event'));
-}
+    public function show($id)
+    {
+        $event = Event::find($id);
 
+        if (!$event) {
+            return redirect()->route('events.index')->with('error', 'Event tidak ditemukan.');
+        }
+
+        return view('events.show', compact('event'));
+    }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan form edit event.
      */
-    public function edit(Event $event)
+    public function edit($id)
     {
+        $event = Event::find($id);
+
+        if (!$event) {
+            return redirect()->route('events.index')->with('error', 'Event tidak ditemukan.');
+        }
+
         return view('events.edit', compact('event'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update data event.
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required',
-            'location' => 'required',
-            'date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        $event = Event::find($id);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('events', 'public');
-            $event->image = $imagePath;
+        if (!$event) {
+            return redirect()->route('events.index')->with('error', 'Event tidak ditemukan.');
         }
 
-        $event->update($request->only(['title', 'location', 'date', 'description', 'status']));
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'location' => 'nullable|string|max:255',
+            'status' => 'nullable|in:pending,approved,rejected',
+            'organizer_id' => 'nullable|integer',
+        ]);
 
-        return redirect()->route('events.index')->with('success', 'Event updated!');
+        $event->update($request->all());
+
+        return redirect()->route('event.show', $id)->with('success', 'Event berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Hapus event dari database.
      */
-    public function destroy(Event $event)
+    public function destroy($id)
     {
+        $event = Event::find($id);
+
+        if (!$event) {
+            return redirect()->route('events.index')->with('error', 'Event tidak ditemukan.');
+        }
+
         $event->delete();
-        return redirect()->route('events.index')->with('success', 'Event deleted!');
+
+        return redirect()->route('events.index')->with('success', 'Event berhasil dihapus.');
+    }
+    
+    public function bookmark(Event $event)
+    {
+        // Add bookmark logic here
+        // For example:
+        auth()->user()->bookmarkedEvents()->toggle($event->id);
+        
+        return back()->with('success', 'Event bookmark status updated successfully');
     }
 }

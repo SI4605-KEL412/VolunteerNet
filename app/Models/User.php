@@ -2,51 +2,50 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    protected $table = 'users'; // kalau nama tabel bukan default
+    // Menentukan kolom primary key yang digunakan
+    protected $primaryKey = 'user_id'; 
 
-    protected $primaryKey = 'UserID';
-    public $incrementing = true;
-    protected $keyType = 'int';
-    public $timestamps = false;
+    // Tentukan jika kamu tidak ingin menggunakan timestamps (optional)
+    public $timestamps = true; // Ini default-nya, jadi bisa dibiarkan true
 
+    // Menentukan kolom yang bisa diisi secara mass-assignment
     protected $fillable = [
-        'Name',
-        'Email',
-        'Password',
-        'ProfileDetails',
-        'ReferralCode',
+        'name',
+        'email',
+        'password',
+        'role',
+        'points',       // Tambahkan kolom points supaya bisa diupdate
     ];
 
-    // Agar Laravel tahu kolom password mana yg digunakan
-    public function getAuthPassword()
+    // Menentukan kolom yang harus disembunyikan, seperti password dan token
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    // Jika kamu ingin mengubah tipe primary key (contoh: non-integer)
+    protected $keyType = 'int';
+
+    // Relasi 1-1 dengan referral program (user sebagai referrer)
+    public function referralProgram()
     {
-        return $this->Password;
+        return $this->hasOne(ReferralProgram::class, 'referrer_id', 'user_id');
     }
 
-    // Agar Laravel tahu kolom email mana yg digunakan
-    public function getEmailForPasswordReset()
+    public function bookmarks()
     {
-        return $this->Email;
+        return $this->hasMany(Bookmark::class, 'user_id', 'user_id');
     }
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
     public function bookmarkedEvents()
     {
-        return $this->belongsToMany(Event::class, 'Bookmarks', 'UserID', 'EventID');
+        return $this->belongsToMany(Event::class);
     }
-    
-    
 }

@@ -2,147 +2,176 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\manageUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Session;
 
-class ManageUserController extends Controller
+class manageUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of users
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $katakunci = $request->katakunci;
-        $jumlahbaris = 10;
-        $roleFilter = $request->role_filter;
-        $statusFilter = $request->status_filter;
+        $katakunci = $request->input('katakunci');
+        $roleFilter = $request->input('role_filter');
 
         $query = manageUser::query();
 
-        if (strlen($katakunci)) {
+        // Search
+        if ($katakunci) {
             $query->where(function($q) use ($katakunci) {
-                $q->where('name', 'like', "%$katakunci%")
-                ->orWhere('email', 'like', "%$katakunci%")
-                ->orWhere('phone', 'like', "%$katakunci%");
+                $q->where('name', 'LIKE', "%{$katakunci}%")
+                  ->orWhere('email', 'LIKE', "%{$katakunci}%");
             });
         }
 
-        if ($roleFilter && in_array($roleFilter, ['volunteer'])) {
+        // Filter Role
+        if ($roleFilter) {
             $query->where('role', $roleFilter);
         }
 
-        if ($statusFilter && in_array($statusFilter, ['active', 'inactive', 'banned'])) {
-            $query->where('status', $statusFilter);
-        }
+        $users = $query->paginate(10);
 
-        $data = $query->orderBy('name', 'asc')->paginate($jumlahbaris);
-
-        return view('manageUser.index')->with([
-            'data' => $data,
-            'katakunci' => $katakunci,
-            'roleFilter' => $roleFilter,
-            'statusFilter' => $statusFilter
-        ]);
+        return view('manageusers.index', compact('users', 'katakunci', 'roleFilter'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new user
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('manageUser.create');
+        return view('manageusers.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created user in storage
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:manageUser',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => ['required', Rule::in([ 'volunteer'])],
-            'skills' => 'nullable|string',
-            'phone' => 'nullable|string|max:20',
-            'status' => ['nullable', Rule::in(['active', 'inactive', 'banned'])],
+            'role' => 'required|in:admin,user,editor',
+            'profiledetails' => 'nullable|string',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $user = manageUser::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'skills' => $request->skills ? explode(',', $request->skills) : null,
-            'phone' => $request->phone,
-            'status' => $request->status ?? 'active',
+            'profiledetails' => $request->profile_detail,
         ]);
 
-        return redirect()->route('manageUser.index')->with('success', 'User created successfully.');
+        return redirect()->route('manageusers.index')
+            ->with('success', 'User created successfully');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $data = manageUser::findOrFail($id);
-        return view('manageUser.show')->with('data', $data);
+        $user = manageUser::findOrFail($id);
+        return view('manageusers.show', compact('user'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $data = manageUser::findOrFail($id);
-        return view('manageUser.edit')->with('data', $data);
+        $user = manageUser::findOrFail($id);
+        return view('manageusers.edit', compact('user'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified user in storage
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('manageUser')->ignore($id)],
-            'password' => 'nullable|string|min:8|confirmed',
-            'role' => ['required', Rule::in(['volunteer'])],
-            'skills' => 'nullable|string',
-            'phone' => 'nullable|string|max:20',
-            'status' => ['required', Rule::in(['active', 'inactive', 'banned'])],
-        ]);
+        $user = manageUser::findOrFail($id);
 
-        $data = [
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->user_id, 'user_id'),
+            ],
+            'role' => 'required|in:admin,user,editor',
+            'profile_detail' => 'nullable|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'skills' => $request->skills ? explode(',', $request->skills) : null,
-            'phone' => $request->phone,
-            'status' => $request->status,
+            'profiledetails' => $request->profile_detail,
+            'updated_at' => now(),
         ];
 
-        if ($request->password) {
-            $data['password'] = Hash::make($request->password);
+        $user->update($userData);
+
+        // Store the updated user ID in the session
+        $updatedUserIds = Session::get('updated_user_ids', []);
+        if (!in_array($user->user_id, $updatedUserIds)) {
+            $updatedUserIds[] = $user->user_id;
         }
+        Session::put('updated_user_ids', $updatedUserIds);
 
-        manageUser::where('id', $id)->update($data);
-
-        return redirect()->route('manageUser.index')->with('success', 'User updated successfully.');
+        return redirect()->route('manageusers.index')
+            ->with('success', 'User updated successfully');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified user from storage
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        manageUser::where('id', $id)->delete(); 
-        return redirect()->route('manageUser.index')->with('success', 'User deleted successfully.');
+        $user = manageUser::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('manageusers.index')
+            ->with('success', 'User deleted successfully');
     }
-
-
 }

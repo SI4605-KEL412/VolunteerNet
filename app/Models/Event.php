@@ -9,13 +9,37 @@ class Event extends Model
 {
     use HasFactory;
 
+    // Tentukan nama tabel jika tidak mengikuti konvensi
+    protected $table = 'event';
+
+    // Tentukan kolom yang dapat diisi (mass assignable)
     protected $fillable = [
-        'title', 'description', 'location', 'date', 'status', 'image'
+        'organizer_id',
+        'title',
+        'description',
+        'location',
+        'start_date',
+        'end_date',
+        'status',
     ];
 
-    public function bookmarkedByUsers()
+    // Tentukan kolom primary key jika menggunakan selain 'id'
+    protected $primaryKey = 'event_id'; // Menggunakan event_id sebagai primary key
+
+    // Tentukan waktu format tanggal sesuai dengan field lainnya
+    public $timestamps = false;
+
+    public function isBookmarkedBy(User $user)
     {
-        return $this->belongsToMany(User::class, 'bookmarks')->withTimestamps();
+        if (!$user) {
+            return false;
+        }
+        return $this->bookmarks()->where('user_id', $user->user_id)->exists();
     }
-    
+
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class, 'event_id');
+    }
 }
+

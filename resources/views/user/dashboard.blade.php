@@ -66,7 +66,7 @@
                 <a class="nav-link" href="{{ route('feedback.index') }}">Feedback</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('portfolio.index') }}">Build Portfolio</a>
+                <a class="nav-link" href="{{ route('volunfeeds.index') }}">VoluFeed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('user.notifications.index') }}">Notification</a>
@@ -76,7 +76,7 @@
                 <a class="nav-link btn btn-info text-white" href="{{ route('referral.index') }}">Kode Referral Saya</a>
             </li>
             <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
+                <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
             </li>
         </ul>
     </div>

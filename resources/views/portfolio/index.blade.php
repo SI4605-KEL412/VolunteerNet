@@ -45,7 +45,7 @@
             <a class="nav-link" href="#">Feedback</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('portfolio.index') }}">Build Portfolio</a>
+            <a class="nav-link" href="{{ route('volunfeeds.index') }}">VoluFeed</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Notification</a>
@@ -62,7 +62,7 @@
         <h2 class="text-primary">Portofolio Saya</h2>
         <a href="{{ route('portfolio.create') }}" class="btn btn-primary">+ Tambah Entri</a>
     </div>
-    <a href="{{ route('user.dashboard') }}" class="btn btn-outline-secondary mb-3">← Kembali ke Dashboard</a>
+    <a href="{{ route('volunfeeds.index') }}" class="btn btn-outline-secondary mb-3">← Kembali ke VoluFeed</a>
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

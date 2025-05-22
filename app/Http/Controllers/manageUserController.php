@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Session;
 
 class manageUserController extends Controller
 {
-    /**
-     * Display a listing of users
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $katakunci = $request->input('katakunci');
@@ -23,15 +18,13 @@ class manageUserController extends Controller
 
         $query = manageUser::query();
 
-        // Search
         if ($katakunci) {
-            $query->where(function($q) use ($katakunci) {
+            $query->where(function ($q) use ($katakunci) {
                 $q->where('name', 'LIKE', "%{$katakunci}%")
                   ->orWhere('email', 'LIKE', "%{$katakunci}%");
             });
         }
 
-        // Filter Role
         if ($roleFilter) {
             $query->where('role', $roleFilter);
         }
@@ -41,22 +34,11 @@ class manageUserController extends Controller
         return view('manageusers.index', compact('users', 'katakunci', 'roleFilter'));
     }
 
-    /**
-     * Show the form for creating a new user
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('manageusers.create');
     }
 
-    /**
-     * Store a newly created user in storage
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -78,44 +60,25 @@ class manageUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'profiledetails' => $request->profile_detail,
+            'profiledetails' => $request->profiledetails, // ✅ perbaikan
         ]);
 
         return redirect()->route('manageusers.index')
             ->with('success', 'User created successfully');
     }
 
-    /**
-     * Display the specified user
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $user = manageUser::findOrFail($id);
         return view('manageusers.show', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified user
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $user = manageUser::findOrFail($id);
         return view('manageusers.edit', compact('user'));
     }
 
-    /**
-     * Update the specified user in storage
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $user = manageUser::findOrFail($id);
@@ -128,7 +91,7 @@ class manageUserController extends Controller
                 Rule::unique('users', 'email')->ignore($user->user_id, 'user_id'),
             ],
             'role' => 'required|in:admin,user,editor',
-            'profile_detail' => 'nullable|string',
+            'profiledetails' => 'nullable|string',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -143,13 +106,12 @@ class manageUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'profiledetails' => $request->profile_detail,
+            'profiledetails' => $request->profiledetails, 
             'updated_at' => now(),
         ];
 
         $user->update($userData);
 
-        // Store the updated user ID in the session
         $updatedUserIds = Session::get('updated_user_ids', []);
         if (!in_array($user->user_id, $updatedUserIds)) {
             $updatedUserIds[] = $user->user_id;
@@ -160,12 +122,6 @@ class manageUserController extends Controller
             ->with('success', 'User updated successfully');
     }
 
-    /**
-     * Remove the specified user from storage
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $user = manageUser::findOrFail($id);

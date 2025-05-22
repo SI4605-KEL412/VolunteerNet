@@ -44,21 +44,24 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
             padding: 2rem;
         }
+
         .form-header {
             padding-bottom: 1.5rem;
             margin-bottom: 1.5rem;
             border-bottom: 1px solid #e9ecef;
         }
+
         .required-field::after {
             content: " *";
             color: red;
         }
+
         .btn-action {
             padding: 8px 24px;
             border-radius: 6px;
             font-weight: 500;
         }
-        /* Status badge styling */
+
         .status-badge {
             display: inline-block;
             padding: 0.35em 0.65em;
@@ -71,24 +74,29 @@
             vertical-align: baseline;
             border-radius: 0.25rem;
         }
+
         .status-pending {
             background-color: #ffc107;
         }
+
         .status-approved {
             background-color: #198754;
         }
+
         .status-rejected {
             background-color: #dc3545;
         }
-        /* Custom styling for status select */
+
         .form-select option[value="pending"] {
             background-color: #fff3cd;
             color: #664d03;
         }
+
         .form-select option[value="approved"] {
             background-color: #d1e7dd;
             color: #0f5132;
         }
+
         .form-select option[value="rejected"] {
             background-color: #f8d7da;
             color: #842029;
@@ -96,7 +104,7 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
+
     <div class="sidebar">
         <div class="d-flex justify-content-between align-items-center p-3">
             <span class="text-white fs-4 fw-bold">Dashboard</span>
@@ -111,9 +119,8 @@
         </ul>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
-        <div class="container-fluid">
+        <div class="container">
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('events.index') }}">Daftar Event</a></li>
@@ -174,34 +181,42 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="location" class="form-label">Lokasi</label>
-                            <input type="text" name="location" id="location" class="form-control @error('location') is-invalid @enderror" value="{{ old('location', $event->location) }}">
-                            @error('location')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                                <option value="pending" {{ old('status', $event->status) == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="approved" {{ old('status', $event->status) == 'approved' ? 'selected' : '' }}>Approved</option>
-                                <option value="rejected" {{ old('status', $event->status) == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Lokasi</label>
+                        <input type="text" name="location" id="location" class="form-control @error('location') is-invalid @enderror" value="{{ old('location', $event->location) }}">
+                        @error('location')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ route('events.index') }}" class="btn btn-secondary btn-action">
-                            <i class="fas fa-arrow-left me-2"></i>Kembali
-                        </a>
-                        <button type="submit" class="btn btn-primary btn-action">
-                            <i class="fas fa-save me-2"></i>Simpan Perubahan
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
+                            <option value="">Pilih Status</option>
+                            <option value="pending" {{ old('status', $event->status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="approved" {{ old('status', $event->status) == 'approved' ? 'selected' : '' }}>Approved</option>
+                            <option value="rejected" {{ old('status', $event->status) == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
+                        @error('status')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="organizer_id" class="form-label">ID Organizer (opsional)</label>
+                        <input type="number" name="organizer_id" id="organizer_id" class="form-control @error('organizer_id') is-invalid @enderror" value="{{ old('organizer_id', $event->organizer_id) }}">
+                        @error('organizer_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success btn-action">
+                            <i class="fas fa-save me-1"></i> Perbarui Event
                         </button>
+                        <a href="{{ route('event.show', $event->event_id) }}" class="btn btn-secondary btn-action">
+                            <i class="fas fa-times me-1"></i> Batal
+                        </a>
                     </div>
                 </form>
             </div>
@@ -209,38 +224,5 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Additional validation for date fields
-        document.addEventListener('DOMContentLoaded', function() {
-            const startDateInput = document.getElementById('start_date');
-            const endDateInput = document.getElementById('end_date');
-            
-            // Ensure end date is after start date
-            endDateInput.addEventListener('change', function() {
-                if(startDateInput.value && endDateInput.value) {
-                    const startDate = new Date(startDateInput.value);
-                    const endDate = new Date(endDateInput.value);
-                    
-                    if(endDate < startDate) {
-                        alert('Tanggal selesai tidak boleh sebelum tanggal mulai');
-                        endDateInput.value = '';
-                    }
-                }
-            });
-            
-            // Ensure start date is before end date
-            startDateInput.addEventListener('change', function() {
-                if(startDateInput.value && endDateInput.value) {
-                    const startDate = new Date(startDateInput.value);
-                    const endDate = new Date(endDateInput.value);
-                    
-                    if(endDate < startDate) {
-                        alert('Tanggal mulai tidak boleh setelah tanggal selesai');
-                        startDateInput.value = '';
-                    }
-                }
-            });
-        });
-    </script>
 </body>
 </html>

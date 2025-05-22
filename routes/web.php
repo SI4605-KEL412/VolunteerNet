@@ -9,6 +9,8 @@ use App\Http\Controllers\UserNotificationController;
 use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\VolunFeedsController;
 
 // Halaman Utama
@@ -27,37 +29,45 @@ Route::post('login', [AuthController::class, 'login']);
 // Logout
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Hanya bisa diakses jika sudah login
+// Rute yang hanya bisa diakses jika sudah login
 Route::middleware('auth')->group(function () {
 
-    // Dashboard untuk User (Volunteer)
+    // Dashboard untuk User
     Route::get('dashboard/user', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
 
-     // User Notifications routes
+
+    // volufeeds
+    Route::get('/volunfeeds', [App\Http\Controllers\VolunFeedsController::class, 'index'])->name('volunfeeds.index');
+
+    // Like/unlike portfolio
+    Route::post('/volunfeeds/{id}/like', [App\Http\Controllers\VolunFeedsController::class, 'toggleLike'])->name('volunfeeds.toggle-like');
+
+    // My portfolios list
+    Route::get('/volunfeeds/my-portfolios', [App\Http\Controllers\VolunFeedsController::class, 'myPortfolios'])->name('volunfeeds.my-portfolios');
+
+    // View portfolio details
+    Route::get('/volunfeeds/{id}', [App\Http\Controllers\VolunFeedsController::class, 'show'])->name('volunfeeds.show');
+
+    // View user profile
+    Route::get('user/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('user.profile');
+
+    // Add new route for volunfeeds.profile
+    Route::get('/volunfeeds/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('volunfeeds.profile');
+    
+    // User Notifications routes
     Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications.index');
     Route::post('/user/notifications/{id}/read', [UserNotificationController::class, 'markAsRead'])->name('user.notifications.read');
     Route::post('/user/notifications/read-all', [UserNotificationController::class, 'markAllAsRead'])->name('user.notifications.read.all');
-
-    // Volunfeeds
-    Route::get('/volunfeeds', [VolunFeedsController::class, 'index'])->name('volunfeeds.index');
-    Route::post('/volunfeeds/{id}/like', [VolunFeedsController::class, 'toggleLike'])->name('volunfeeds.toggle-like');
-    // View portfolio details
-    Route::get('/volunfeeds/{id}', [VolunFeedsController::class, 'show'])->name('volunfeeds.show');
-    // View user profile
-    Route::get('user/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('user.profile');
-    // Add new route for volunfeeds.profile
-    Route::get('/volunfeeds/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('volunfeeds.profile');
-    Route::get('/volunfeeds/my-portfolios', [App\Http\Controllers\VolunFeedsController::class, 'myPortfolios'])->name('volunfeeds.my-portfolios');
 
     // Dashboard untuk Admin
     Route::get('dashboard/admin', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-    // Dashboard untuk Event Organizer (EO)
+    // Dashboard untuk EO
     Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('dashboardEO');
 
-     // Admin Notifications routes
+    // Admin Notifications routes
     Route::get('/admin/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
     Route::get('/admin/notifications/create', [AdminNotificationController::class, 'create'])->name('admin.notifications.create');
     Route::post('/admin/notifications', [AdminNotificationController::class, 'store'])->name('admin.notifications.store');
@@ -81,14 +91,32 @@ Route::middleware('auth')->group(function () {
     Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update'); // Proses update user
     Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy'); // Hapus user
 
-    //Portfolio
+    // Portfolio
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index'); // Read
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create'); // Create Form
     Route::post('/portfolio', [PortfolioController::class, 'store'])->name('portfolio.store'); // Store Create
     Route::get('/portfolio/{id}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit'); // Edit Form
     Route::put('/portfolio/{id}', [PortfolioController::class, 'update'])->name('portfolio.update'); // Update
     Route::delete('/portfolio/{id}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy'); // Delete
+
+    // Feedback
+    Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+    Route::get('feedback/create', [FeedbackController::class, 'create'])->name('feedback.create');
+    Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+    Route::get('feedback/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+    Route::get('feedback/{id}/edit', [FeedbackController::class, 'edit'])->name('feedback.edit');
+    Route::put('feedback/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
+    Route::delete('feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+
 });
 
 // Route untuk activities yang bisa diakses tanpa auth middleware
 Route::get('activities', [ActivityController::class, 'index'])->name('activities.index');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/referral', [ReferralController::class, 'index'])->name('referral.index');
+    Route::post('/referral/generate', [ReferralController::class, 'generate'])->name('referral.generate');
+
+    // Route untuk proses pencatatan referral (contoh user baru pakai kode referral)
+    Route::post('/referral/store', [ReferralController::class, 'storeReferral'])->name('referral.store');
+});

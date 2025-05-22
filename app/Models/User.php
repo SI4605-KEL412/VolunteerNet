@@ -17,16 +17,32 @@ class User extends Authenticatable
 
     // Menentukan kolom yang bisa diisi secara mass-assignment
     protected $fillable = [
-        'name', 'email', 'password', 'role',
+        'name',
+        'email',
+        'password',
+        'role',
+        'points',       // Tambahkan kolom points supaya bisa diupdate
     ];
 
     // Menentukan kolom yang harus disembunyikan, seperti password dan token
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     // Jika kamu ingin mengubah tipe primary key (contoh: non-integer)
     protected $keyType = 'int';
+
+    // Relasi 1-1 dengan referral program (user sebagai referrer)
+    public function referralProgram()
+    {
+        return $this->hasOne(ReferralProgram::class, 'referrer_id', 'user_id');
+    }
+
+    public function portfolios()
+    {
+        return $this->hasMany(Portfolio::class, 'user_id');
+    }
 
     /**
      * Mendapatkan portfolio yang dilike oleh user

@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
 
     // Add new route for volunfeeds.profile
     Route::get('/volunfeeds/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('volunfeeds.profile');
-    
+
     // User Notifications routes
     Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications.index');
     Route::post('/user/notifications/{id}/read', [UserNotificationController::class, 'markAsRead'])->name('user.notifications.read');
@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     })->name('admin.dashboard');
 
     // Dashboard untuk EO
-    Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('dashboardEO');
+    Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('user.dashboardEO');
 
     // Admin Notifications routes
     Route::get('/admin/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');

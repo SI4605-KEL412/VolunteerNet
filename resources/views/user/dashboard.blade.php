@@ -75,6 +75,12 @@
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-info text-white" href="{{ route('referral.index') }}">Kode Referral Saya</a>
             </li>
+            <!-- Tombol Recruitment User -->
+            <li class="nav-item mt-3">
+                <a class="nav-link btn btn-success text-white" href="{{ route('recruitmentUser.index') }}">
+                    <i class="bi bi-person-plus"></i> Recruitment Event
+                </a>
+            </li>
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
             </li>
@@ -120,7 +126,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Optional: Bootstrap Icons CDN for the sidebar icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </body>
 
 </html>

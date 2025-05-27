@@ -100,15 +100,18 @@ Route::middleware('auth')->group(function () {
         Route::delete('{id}', [FeedbackController::class, 'destroy'])->name('destroy');
     });
 
-    // // Recruitment EO - Untuk Admin
-    // Route::prefix('admin/recruitments')->name('admin.recruitment.')->group(function () {
-    //     Route::get('/', [RecruitmentController::class, 'index'])->name('index');
-    //     Route::get('{id}', [RecruitmentController::class, 'show'])->name('show');
-    //     Route::get('{id}/edit', [RecruitmentController::class, 'edit'])->name('edit');
-    //     Route::put('{id}', [RecruitmentController::class, 'update'])->name('update');
+    // Recruitment User Side
+    Route::prefix('recruitment-user')->name('recruitmentUser.')->group(function () {
+        Route::get('/', [RecruitmentController::class, 'userIndex'])->name('index');
+        Route::get('create', [RecruitmentController::class, 'userCreate'])->name('create');
+        Route::post('/', [RecruitmentController::class, 'userStore'])->name('store');
+        Route::get('{id}', [RecruitmentController::class, 'userShow'])->name('show');
+        Route::get('{id}/edit', [RecruitmentController::class, 'userEdit'])->name('edit');
+        Route::put('{id}', [RecruitmentController::class, 'userUpdate'])->name('update');
+        Route::delete('{id}', [RecruitmentController::class, 'userDestroy'])->name('destroy');
     });
 
-    // EO Recruitment
+    // Recruitment EO Side
     Route::prefix('eo/recruitment')->name('eo.recruitment.')->group(function () {
         Route::get('/', [RecruitmentController::class, 'index'])->name('index');
         Route::get('/create', [RecruitmentController::class, 'create'])->name('create');
@@ -119,10 +122,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/{recruitment}', [RecruitmentController::class, 'show'])->name('show');
     });
 
-
     // Referral
     Route::prefix('referral')->name('referral.')->group(function () {
         Route::get('/', [ReferralController::class, 'index'])->name('index');
         Route::post('generate', [ReferralController::class, 'generate'])->name('generate');
         Route::post('store', [ReferralController::class, 'storeReferral'])->name('store');
     });
+});

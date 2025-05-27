@@ -8,16 +8,16 @@ use App\Models\User;
 
 class Recruitment extends Model
 {
-    // Menyesuaikan nama tabel di database
+    // Nama tabel di database
     protected $table = 'recruitment';
 
-    // Menyesuaikan primary key
+    // Primary key
     protected $primaryKey = 'recruitment_id';
 
-    // Menonaktifkan timestamps karena tidak ada kolom created_at dan updated_at
+    // Tidak menggunakan timestamps
     public $timestamps = false;
 
-    // Kolom yang boleh diisi secara massal
+    // Kolom yang boleh diisi massal
     protected $fillable = [
         'user_id',
         'event_id',
@@ -27,16 +27,15 @@ class Recruitment extends Model
         'date_applied',
     ];
 
-    // Relasi ke event (yang dibuat EO)
+    // Relasi ke event
     public function event()
     {
         return $this->belongsTo(Event::class, 'event_id', 'event_id');
     }
 
-    // Relasi ke user (relawan yang mendaftar)
+    // Relasi ke user
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id'); 
-        // catatan: biasanya User model pakai 'id' sebagai PK, kalau beda, sesuaikan di sini
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 }

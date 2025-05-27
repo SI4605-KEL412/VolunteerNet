@@ -26,10 +26,6 @@
             text-align: center;
         }
 
-        .card-deck .card {
-            margin-bottom: 20px;
-        }
-
         .sidebar {
             height: 100vh;
             position: fixed;
@@ -77,6 +73,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.notifications.index') }}">Manage Notification</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('eo.recruitment.index') }}">Manage EO Recruitments</a>
+            </li>
         </ul>
     </div>
 
@@ -85,7 +84,7 @@
         <!-- Hero Section -->
         <div class="hero">
             <h1 class="mb-3">Welcome!</h1>
-            <p class="mb-4">This is your dashboard Eo</p>
+            <p class="mb-4">This is your admin dashboard</p>
             <a href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                class="btn btn-danger">Logout</a>
@@ -99,4 +98,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

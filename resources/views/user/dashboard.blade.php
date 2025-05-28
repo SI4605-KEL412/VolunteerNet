@@ -66,7 +66,7 @@
                 <a class="nav-link" href="{{ route('feedback.index') }}">Feedback</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('portfolio.index') }}">Build Portfolio</a>
+                <a class="nav-link" href="{{ route('volunfeeds.index') }}">VoluFeed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('user.notifications.index') }}">Notification</a>
@@ -79,6 +79,11 @@
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-warning text-white" href="{{ route('certifications.index') }}">Sertifikat Saya</a>
             </li>
+            <!-- Link Social Network -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('forums.index') }}">Social Network</a>
+            </li>
+            <!-- Link ke EO Dashboard -->
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
             </li>

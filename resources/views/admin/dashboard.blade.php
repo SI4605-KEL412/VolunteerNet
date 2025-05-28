@@ -74,6 +74,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('events.index') }}">Manage Events</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.notifications.index') }}">Manage Notification</a>
+            </li>
         </ul>
     </div>
 
@@ -96,5 +99,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

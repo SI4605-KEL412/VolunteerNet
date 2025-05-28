@@ -44,15 +44,18 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
             padding: 2rem;
         }
+
         .form-header {
             padding-bottom: 1.5rem;
             margin-bottom: 1.5rem;
             border-bottom: 1px solid #e9ecef;
         }
+
         .required-field::after {
             content: " *";
             color: red;
         }
+
         .btn-action {
             padding: 8px 24px;
             border-radius: 6px;
@@ -61,6 +64,7 @@
     </style>
 </head>
 <body>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="d-flex justify-content-between align-items-center p-3">

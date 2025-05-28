@@ -98,74 +98,71 @@
             </div>
         </div>
 
-        <!-- Search -->
-        <form action="{{ route('manageusers.index') }}" method="get" class="mb-3">
-            <div class="input-group">
-                <input type="text" name="katakunci" value="{{ $katakunci ?? '' }}" class="form-control" placeholder="Search for name or email..." />
-                <button class="btn btn-primary" type="submit">Search</button>
-            </div>
-        </form>
+        <!-- Search and User Table -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">User List</h5>
 
-        <!-- User Table -->
-        <div class="table-responsive shadow-sm bg-white rounded">
-            <table class="table table-hover mb-0">
-                <thead class="bg-primary text-white">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th style="width: 180px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($users as $item)
-                        <tr>
-                            <td class="py-3 px-4 d-flex align-items-center">
-                                <div class="bg-secondary rounded-circle me-3" style="width: 32px; height: 32px;"></div>
-                                {{ $item->name }}
-                            </td>
-                            <td class="align-middle">{{ $item->email }}</td>
-                            <td class="align-middle">{{ ucfirst($item->role) }}</td>
-                            <td class="align-middle">
-                                <div class="btn-group" role="group" aria-label="User actions">
-                                    <a href="{{ route('manageusers.show', $item->user_id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                    <a href="{{ route('manageusers.edit', $item->user_id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                    <form onsubmit="return confirm('Are you sure you want to delete this user?');" action="{{ route('manageusers.destroy', $item->user_id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="4" class="text-center py-4">No volunteers found.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                <form action="{{ route('manageusers.index') }}" method="get" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="katakunci" value="{{ $katakunci ?? '' }}" class="form-control" placeholder="Search for name or email..." />
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
 
-        <!-- Toast Notification -->
-        @if(session('success'))
-            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
-                <div class="toast show bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <strong class="me-auto">Notification</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        {{ session('success') }}
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $item)
+                                @if($item->role == 'user') <!-- Only volunteers -->
+                                <tr>
+                                    <td class="py-3 px-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-secondary rounded-circle me-3" style="width: 32px; height: 32px;"></div>
+                                            {{ $item->name }}
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">{{ $item->email }}</td>
+                                    <td class="align-middle">{{ ucfirst($item->role) }}</td>
+                                    <td class="align-middle">
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('manageusers.show', $item->user_id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                            <a href="{{ route('manageusers.edit', $item->user_id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                            <form onsubmit="return confirm('Are you sure you want to delete this user?');" action="{{ route('manageusers.destroy', $item->user_id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <script>
-                setTimeout(() => {
-                    document.querySelector('.toast').classList.remove('show');
-                }, 3000);
-            </script>
+        </div>
+
+        <!-- Success message -->
+        @if(session('success'))
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
         @endif
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

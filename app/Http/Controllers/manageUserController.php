@@ -149,6 +149,7 @@ class manageUserController extends Controller
 
         $user->update($userData);
 
+        // Store the updated user ID in the session
         $updatedUserIds = Session::get('updated_user_ids', []);
         if (!in_array($user->user_id, $updatedUserIds)) {
             $updatedUserIds[] = $user->user_id;

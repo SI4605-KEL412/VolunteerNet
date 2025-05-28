@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Detail Event: {{ $event->title }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
         body {
             background: linear-gradient(to bottom, #0066cc, #f0f8ff);
@@ -36,6 +36,7 @@
         .content {
             margin-left: 250px;
             padding: 20px;
+            max-width: calc(100% - 250px);
         }
 
         .card {
@@ -44,30 +45,36 @@
             border-radius: 8px;
             overflow: hidden;
         }
+
         .card-header {
             background-color: #f8f9fa;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             padding: 1.5rem;
         }
+
         .card-body {
             padding: 1.5rem;
         }
+
         .btn-action {
             padding: 8px 24px;
             border-radius: 6px;
             font-weight: 500;
         }
+
         .detail-label {
             font-weight: 600;
             width: 150px;
             display: inline-block;
             color: #495057;
         }
+
         .detail-item {
             margin-bottom: 1rem;
             padding-bottom: 0.8rem;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
+
         .detail-item:last-child {
             border-bottom: none;
             margin-bottom: 0;
@@ -143,7 +150,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="mt-4 d-flex gap-2">
                 <a href="{{ route('events.index') }}" class="btn btn-secondary btn-action">
                     <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar

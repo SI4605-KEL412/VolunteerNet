@@ -91,4 +91,25 @@ class User extends Authenticatable
 
         return false;
     }
+    public function impacttracker()
+    {
+        return $this->hasMany(\App\Models\ImpactTracker::class, 'user_id', 'user_id');
+    }
+    public function recruitments()
+    {
+        return $this->hasMany(\App\Models\Recruitment::class, 'user_id', 'user_id');
+    }
+
+    // Relasi ke event yang diikuti user lewat recruitment
+    public function events()
+    {
+        return $this->belongsToMany(
+            Event::class,
+            'recruitment',      // nama tabel pivot
+            'user_id',          // foreign key di tabel recruitment
+            'event_id',         // foreign key event di tabel recruitment
+            'user_id',          // local key di tabel users
+            'event_id'          // local key di tabel event
+        )->withPivot('status', 'motivation', 'admin_notes', 'date_applied');
+    }
 }

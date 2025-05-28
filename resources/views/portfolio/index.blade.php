@@ -45,7 +45,7 @@
             <a class="nav-link" href="#">Feedback</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('volunfeeds.index') }}">VoluFeed</a>
+            <a class="nav-link" href="{{ route('portfolio.index') }}">Build Portfolio</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Notification</a>
@@ -62,7 +62,7 @@
         <h2 class="text-primary">Portofolio Saya</h2>
         <a href="{{ route('portfolio.create') }}" class="btn btn-primary">+ Tambah Entri</a>
     </div>
-    <a href="{{ route('volunfeeds.index') }}" class="btn btn-outline-secondary mb-3">← Kembali ke VoluFeed</a>
+    <a href="{{ route('user.dashboard') }}" class="btn btn-outline-secondary mb-3">← Kembali ke Dashboard</a>
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -82,6 +82,15 @@
                                 <small class="text-muted">Tanggal: {{ \Carbon\Carbon::parse($entry->date)->format('d M Y') }}</small>
                                 <small class="text-muted">Lokasi: {{ $entry->location ?? '-' }}</small>
                             </div>
+
+                            @if ($entry->file_path)
+                                <div class="mt-2">
+                                    <a href="{{ asset('storage/portfolio_files/' . $entry->file_path) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                        Lihat File
+                                    </a>
+                                </div>
+                            @endif
+
                             <div class="mt-3">
                                 <a href="{{ route('portfolio.edit', $entry->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <form action="{{ route('portfolio.destroy', $entry->id) }}" method="POST" class="d-inline">

@@ -35,15 +35,25 @@ class PortfolioController extends Controller
             'description' => 'nullable',
             'date' => 'nullable|date',
             'location' => 'nullable|max:255',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        Portfolio::create([
+        $data = [
             'user_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
             'date' => $request->date,
             'location' => $request->location,
-        ]);
+        ];
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('portfolio_files', $filename, 'public');
+            $data['file_path'] = $filename;
+        }
+
+        Portfolio::create($data);
 
         return redirect()->route('portfolio.index')->with('success', 'Entri portofolio berhasil ditambahkan.');
     }
@@ -77,9 +87,19 @@ class PortfolioController extends Controller
             'description' => 'nullable',
             'date' => 'nullable|date',
             'location' => 'nullable|max:255',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // validasi file
         ]);
 
-        $portfolio->update($request->only('title', 'description', 'date', 'location'));
+        $data = $request->only('title', 'description', 'date', 'location');
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('portfolio_files', $filename, 'public');
+            $data['file_path'] = $filename;
+        }
+
+        $portfolio->update($data);
 
         return redirect()->route('portfolio.index')->with('success', 'Entri berhasil diperbarui.');
     }

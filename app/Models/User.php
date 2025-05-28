@@ -38,4 +38,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(ReferralProgram::class, 'referrer_id', 'user_id');
     }
+    public function certifications()
+{
+    return $this->hasMany(Certification::class, 'user_id', 'user_id');
+}
+
 }

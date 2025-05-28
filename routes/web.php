@@ -11,6 +11,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\CertificationController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -45,7 +46,7 @@ Route::middleware('auth')->group(function () {
     })->name('admin.dashboard');
 
     // Dashboard untuk EO
-    Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('dashboardEO');
+    Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('user.dashboardEO');
 
     // Admin Notifications routes
     Route::get('/admin/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
@@ -96,6 +97,14 @@ Route::get('activities', [ActivityController::class, 'index'])->name('activities
 Route::middleware('auth')->group(function () {
     Route::get('/referral', [ReferralController::class, 'index'])->name('referral.index');
     Route::post('/referral/generate', [ReferralController::class, 'generate'])->name('referral.generate');
+    Route::get('/certifications', [CertificationController::class, 'index'])->name('certifications.index');
+    Route::post('/certifications', [CertificationController::class, 'store'])->name('certifications.store');
+    Route::get('/certifications/generate/{event_id}', [CertificationController::class, 'generate'])->name('certifications.generate');
+    Route::get('/certifications/events', [CertificationController::class, 'showAllEvents'])->name('certifications.events');
+    Route::delete('/certifications/{id}', [CertificationController::class, 'destroy'])->name('certifications.destroy');
+
+
+
 
     // Route untuk proses pencatatan referral (contoh user baru pakai kode referral)
     Route::post('/referral/store', [ReferralController::class, 'storeReferral'])->name('referral.store');

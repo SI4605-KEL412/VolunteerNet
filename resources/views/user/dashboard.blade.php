@@ -75,8 +75,12 @@
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-info text-white" href="{{ route('referral.index') }}">Kode Referral Saya</a>
             </li>
+            <!-- Tombol Sertifikat -->
             <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
+                <a class="nav-link btn btn-warning text-white" href="{{ route('certifications.index') }}">Sertifikat Saya</a>
+            </li>
+            <li class="nav-item mt-3">
+                <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
             </li>
         </ul>
     </div>

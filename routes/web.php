@@ -141,5 +141,27 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ReferralController::class, 'index'])->name('index');
         Route::post('generate', [ReferralController::class, 'generate'])->name('generate');
         Route::post('store', [ReferralController::class, 'storeReferral'])->name('store');
+
     });
+
+    Route::get('/certifications', [CertificationController::class, 'index'])->name('certifications.index');
+    Route::post('/certifications', [CertificationController::class, 'store'])->name('certifications.store');
+    Route::get('/certifications/generate/{event_id}', [CertificationController::class, 'generate'])->name('certifications.generate');
+    Route::get('/certifications/events', [CertificationController::class, 'showAllEvents'])->name('certifications.events');
+    Route::delete('/certifications/{id}', [CertificationController::class, 'destroy'])->name('certifications.destroy');
+
+    // Forum
+    Route::get('forums', [ForumController::class, 'index'])->name('forums.index');
+    Route::get('forums/create', [ForumController::class, 'create'])->name('forums.create');
+    Route::post('forums', [ForumController::class, 'store'])->name('forums.store');
+    Route::get('forums/{forum}', [ForumController::class, 'show'])->name('forums.show');
+    Route::get('forums/{forum}/edit', [ForumController::class, 'edit'])->name('forums.edit');
+    Route::put('forums/{forum}', [ForumController::class, 'update'])->name('forums.update');
+    Route::delete('forums/{forum}', [ForumController::class, 'destroy'])->name('forums.destroy');
+
+    // Comment
+    Route::post('forums/{forum}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });

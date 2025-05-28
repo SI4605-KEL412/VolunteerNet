@@ -113,14 +113,14 @@ Route::middleware('auth')->group(function () {
 
     // Recruitment EO Side
     Route::prefix('eo/recruitment')->name('eo.recruitment.')->group(function () {
-        Route::get('/', [RecruitmentController::class, 'index'])->name('index');
-        Route::get('/create', [RecruitmentController::class, 'create'])->name('create');
-        Route::post('/', [RecruitmentController::class, 'store'])->name('store');
-        Route::get('/{recruitment}/edit', [RecruitmentController::class, 'edit'])->name('edit');
-        Route::put('/{recruitment}', [RecruitmentController::class, 'update'])->name('update');
-        Route::delete('/{recruitment}', [RecruitmentController::class, 'destroy'])->name('destroy');
-        Route::get('/{recruitment}', [RecruitmentController::class, 'show'])->name('show');
-    });
+    Route::get('/', [RecruitmentController::class, 'index'])->name('index');
+    Route::get('/create', [RecruitmentController::class, 'create'])->name('create');
+    Route::post('/', [RecruitmentController::class, 'store'])->name('store');
+    Route::get('/{recruitment}/edit', [RecruitmentController::class, 'edit'])->name('edit');
+    Route::put('/{recruitment}', [RecruitmentController::class, 'update'])->name('update');
+    Route::delete('/{recruitment}', [RecruitmentController::class, 'destroy'])->name('destroy');
+    Route::get('/{recruitment}', [RecruitmentController::class, 'show'])->name('show');
+});
 
     // Referral
     Route::prefix('referral')->name('referral.')->group(function () {

@@ -17,8 +17,9 @@ class RecruitmentController extends Controller
     {
         $userId = auth()->id(); // ID EO yang login
 
+        // Ambil semua recruitment untuk event yang dibuat oleh EO ini
         $recruitments = Recruitment::whereHas('event', function ($query) use ($userId) {
-            $query->where('organizer_id', $userId); // EO hanya bisa lihat event miliknya
+            $query->where('organizer_id', $userId);
         })->with(['event', 'user'])->orderByDesc('date_applied')->get();
 
         return view('recruitmentEO.index', compact('recruitments'));
@@ -42,7 +43,7 @@ class RecruitmentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,accepted,rejected',
+            'status' => 'required|in:accepted,rejected',
             'admin_notes' => 'nullable|string',
         ]);
 

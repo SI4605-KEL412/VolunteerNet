@@ -13,6 +13,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\VolunFeedsController;
 
 // Halaman Utama
@@ -37,26 +38,15 @@ Route::middleware('auth')->group(function () {
     // Dashboard untuk User
     Route::get('dashboard/user', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
 
-
     // volufeeds
-    Route::get('/volunfeeds', [App\Http\Controllers\VolunFeedsController::class, 'index'])->name('volunfeeds.index');
-
-    // Like/unlike portfolio
-    Route::post('/volunfeeds/{id}/like', [App\Http\Controllers\VolunFeedsController::class, 'toggleLike'])->name('volunfeeds.toggle-like');
-
-    // My portfolios list
-    Route::get('/volunfeeds/my-portfolios', [App\Http\Controllers\VolunFeedsController::class, 'myPortfolios'])->name('volunfeeds.my-portfolios');
-
-    // View portfolio details
-    Route::get('/volunfeeds/{id}', [App\Http\Controllers\VolunFeedsController::class, 'show'])->name('volunfeeds.show');
-
-    // View user profile
+    Route::get('/volunfeeds', [VolunFeedsController::class, 'index'])->name('volunfeeds.index');
+    Route::post('/volunfeeds/{id}/like', [VolunFeedsController::class, 'toggleLike'])->name('volunfeeds.toggle-like');
+    Route::get('/volunfeeds/my-portfolios', [VolunFeedsController::class, 'myPortfolios'])->name('volunfeeds.my-portfolios');
+    Route::get('/volunfeeds/{id}', [VolunFeedsController::class, 'show'])->name('volunfeeds.show');
     Route::get('user/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('user.profile');
-
-    // Add new route for volunfeeds.profile
     Route::get('/volunfeeds/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('volunfeeds.profile');
 
-    // User Notifications routes
+    // User Notifications
     Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications.index');
     Route::post('/user/notifications/{id}/read', [UserNotificationController::class, 'markAsRead'])->name('user.notifications.read');
     Route::post('/user/notifications/read-all', [UserNotificationController::class, 'markAllAsRead'])->name('user.notifications.read.all');
@@ -69,7 +59,7 @@ Route::middleware('auth')->group(function () {
     // Dashboard untuk EO
     Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('user.dashboardEO');
 
-    // Admin Notifications routes
+    // Admin Notifications
     Route::get('/admin/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
     Route::get('/admin/notifications/create', [AdminNotificationController::class, 'create'])->name('admin.notifications.create');
     Route::post('/admin/notifications', [AdminNotificationController::class, 'store'])->name('admin.notifications.store');
@@ -77,7 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/notifications/bulk', [AdminNotificationController::class, 'bulkStore'])->name('admin.notifications.bulk.store');
     Route::get('/admin/notifications/list', [AdminNotificationController::class, 'index'])->name('admin.notifications.list');
 
-    // Halaman Event
+    // Event
     Route::get('event/{id}', [EventController::class, 'show'])->name('event.show');
     Route::get('events', [EventController::class, 'index'])->name('events.index');
     Route::get('events/create', [EventController::class, 'create'])->name('events.create');
@@ -93,7 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update');
     Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy');
 
-    // Forum Routes
+    // Forum
     Route::get('forums', [ForumController::class, 'index'])->name('forums.index');
     Route::get('forums/create', [ForumController::class, 'create'])->name('forums.create');
     Route::post('forums', [ForumController::class, 'store'])->name('forums.store');
@@ -102,7 +92,7 @@ Route::middleware('auth')->group(function () {
     Route::put('forums/{forum}', [ForumController::class, 'update'])->name('forums.update');
     Route::delete('forums/{forum}', [ForumController::class, 'destroy'])->name('forums.destroy');
 
-    // Comment Routes
+    // Comment
     Route::post('forums/{forum}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::get('comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
     Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
@@ -129,7 +119,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/referral', [ReferralController::class, 'index'])->name('referral.index');
     Route::post('/referral/generate', [ReferralController::class, 'generate'])->name('referral.generate');
     Route::post('/referral/store', [ReferralController::class, 'storeReferral'])->name('referral.store');
+
+    // Certifications
+    Route::get('/certifications', [CertificationController::class, 'index'])->name('certifications.index');
+    Route::post('/certifications', [CertificationController::class, 'store'])->name('certifications.store');
+    Route::get('/certifications/generate/{event_id}', [CertificationController::class, 'generate'])->name('certifications.generate');
+    Route::get('/certifications/events', [CertificationController::class, 'showAllEvents'])->name('certifications.events');
+    Route::delete('/certifications/{id}', [CertificationController::class, 'destroy'])->name('certifications.destroy');
 });
 
-// Route untuk activities yang bisa diakses tanpa auth middleware
+// Route activities di luar middleware auth
 Route::get('activities', [ActivityController::class, 'index'])->name('activities.index');

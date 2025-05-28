@@ -17,6 +17,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\VolunFeedsController;
+use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\ImpactTrackerController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -174,4 +176,21 @@ Route::middleware('auth')->group(function () {
     Route::get('comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
     Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Bookmark
+    Route::resource('bookmarks', BookmarkController::class)->only([
+        'index', 'store', 'destroy'
+    ]);
+
+    // Impact Tracker
+    // Impact Tracker EO (pindah ke dalam prefix eo)
+    Route::prefix('eo')->group(function () {
+        Route::get('impacttracker', [ImpactTrackerController::class, 'eoIndex'])->name('impacttracker.eo.index');
+        Route::get('impacttracker/{event}/create', [ImpactTrackerController::class, 'create'])->name('impacttracker.eo.create');
+        Route::post('impacttracker/{event}', [ImpactTrackerController::class, 'store'])->name('impacttracker.eo.store');
+    });
+
+    // Impact Tracker User tetap di luar prefix
+    Route::get('impacttracker', [ImpactTrackerController::class, 'userIndex'])->name('impacttracker.user.index');
+
 });

@@ -186,6 +186,21 @@
                                     <i class="bi bi-person-plus"></i> Daftar
                                 </a>
                             @endif
+                            @if(Auth::check())
+                                @if(isset($event->bookmarked) && $event->bookmarked)
+                                    <form action="{{ route('bookmarks.destroy', $event->bookmark_id) }}" method="POST" style="display:inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-warning btn-sm">Remove Bookmark</button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('bookmarks.store') }}" method="POST" style="display:inline">
+                                        @csrf
+                                        <input type="hidden" name="event_id" value="{{ $event->event_id }}">
+                                        <button type="submit" class="btn btn-primary btn-sm">Bookmark</button>
+                                    </form>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 </div>

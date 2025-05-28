@@ -19,12 +19,12 @@ class BookmarkController extends Controller
     public function toggle(Event $event)
     {
         // Validasi event_id
-        if (!$event || !$event->id) {
+        if (!$event || !$event->event_id) {
             return back()->with('error', 'Event tidak ditemukan.');
         }
 
         $bookmark = Bookmark::where('user_id', auth()->id())
-                           ->where('event_id', $event->id)
+                           ->where('event_id', $event->event_id)
                            ->first();
 
         if ($bookmark) {
@@ -35,7 +35,7 @@ class BookmarkController extends Controller
         // Pastikan semua data terisi
         $data = [
             'user_id' => auth()->id(),
-            'event_id' => $event->id,
+            'event_id' => $event->event_id,
             'created_at' => now(),
             'updated_at' => now()
         ];

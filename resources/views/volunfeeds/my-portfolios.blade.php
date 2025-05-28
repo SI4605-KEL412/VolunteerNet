@@ -92,7 +92,7 @@
                 <a class="nav-link" href="{{ route('user.notifications.index') }}">Notification</a>
             </li>
             <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
+                <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
             </li>
         </ul>
     </div>
@@ -148,19 +148,6 @@
                                             Dibuat: {{ \Carbon\Carbon::parse($portfolio->created_at)->format('d M Y, H:i') }}
                                         </small>
                                     </div>
-                                </div>
-                                <div class="card-footer d-flex justify-content-end">
-                                    <a href="{{ route('portfolio.edit', $portfolio->id) }}" class="btn btn-sm btn-outline-secondary me-2">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('portfolio.destroy', $portfolio->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus portfolio ini?')">
-                                            Hapus
-                                        </button>
-                                    </form>
                                 </div>
                             </div>
                         @empty

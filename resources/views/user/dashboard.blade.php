@@ -94,6 +94,11 @@
                 <a class="nav-link" href="{{ route('forums.index') }}">Social Network</a>
             </li>
 
+            <!-- Detail User -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('users.show', Auth::id()) }}">Detail</a>
+            </li>
+
             <!-- Link ke EO Dashboard -->
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
@@ -107,8 +112,7 @@
         <div class="hero">
             <h1 class="mb-3">Welcome, {{ $userName }}!</h1>
             <p class="mb-4">This is your dashboard.</p>
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                class="btn btn-danger">Logout</a>
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-danger">Logout</a>
 
             <!-- Logout form -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

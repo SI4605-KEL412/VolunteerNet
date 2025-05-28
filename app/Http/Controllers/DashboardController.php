@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
     $events = Event::orderBy('start_date', 'desc')->limit(3)->get();
 
-    return view('admin.dashboard', compact('events', 'userName'));
+    return view('user.dashboardEO', compact('events', 'userName'));
 }
 
 }

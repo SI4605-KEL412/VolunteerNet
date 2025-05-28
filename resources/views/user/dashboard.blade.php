@@ -66,24 +66,42 @@
                 <a class="nav-link" href="{{ route('feedback.index') }}">Feedback</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('portfolio.index') }}">Build Portfolio</a>
+                <a class="nav-link" href="{{ route('volunfeeds.index') }}">VoluFeed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('user.notifications.index') }}">Notification</a>
             </li>
+
             <!-- Tombol Referral -->
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-info text-white" href="{{ route('referral.index') }}">Kode Referral Saya</a>
             </li>
+
+            <!-- Tombol Recruitment User -->
+            <li class="nav-item mt-3">
+                <a class="nav-link btn btn-success text-white" href="{{ route('recruitmentUser.index') }}">
+                    <i class="bi bi-person-plus"></i> Recruitment Event
+                </a>
+            </li>
+
+            <!-- Tombol Sertifikat -->
+            <li class="nav-item mt-3">
+                <a class="nav-link btn btn-warning text-white" href="{{ route('certifications.index') }}">Sertifikat Saya</a>
+            </li>
+
+            <!-- Link Social Network -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('forums.index') }}">Social Network</a>
             </li>
+
+            <!-- Detail User -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('users.show', Auth::id()) }}"">Detail</a>
+                <a class="nav-link" href="{{ route('users.show', Auth::id()) }}">Detail</a>
             </li>
-            
+
+            <!-- Link ke EO Dashboard -->
             <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
+                <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
             </li>
         </ul>
     </div>
@@ -94,8 +112,7 @@
         <div class="hero">
             <h1 class="mb-3">Welcome, {{ $userName }}!</h1>
             <p class="mb-4">This is your dashboard.</p>
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                class="btn btn-danger">Logout</a>
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-danger">Logout</a>
 
             <!-- Logout form -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -127,7 +144,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Optional: Bootstrap Icons CDN for the sidebar icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </body>
 
 </html>

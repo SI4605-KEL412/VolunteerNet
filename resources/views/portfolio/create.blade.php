@@ -21,7 +21,7 @@
         </div>
     @endif
 
-    <form action="{{ route('portfolio.store') }}" method="POST">
+    <form action="{{ route('portfolio.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -42,6 +42,12 @@
         <div class="mb-3">
             <label for="location" class="form-label">Lokasi</label>
             <input type="text" class="form-control" id="location" name="location" value="{{ old('location') }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="file" class="form-label">Upload File (opsional)</label>
+            <input type="file" class="form-control" id="file" name="file" accept=".pdf,image/*">
+            <small class="text-muted">Format: PDF, JPG, PNG. Max 2MB.</small>
         </div>
 
         <button type="submit" class="btn btn-primary">Simpan</button>

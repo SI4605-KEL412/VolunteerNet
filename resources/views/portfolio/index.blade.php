@@ -82,6 +82,15 @@
                                 <small class="text-muted">Tanggal: {{ \Carbon\Carbon::parse($entry->date)->format('d M Y') }}</small>
                                 <small class="text-muted">Lokasi: {{ $entry->location ?? '-' }}</small>
                             </div>
+
+                            @if ($entry->file_path)
+                                <div class="mt-2">
+                                    <a href="{{ asset('storage/portfolio_files/' . $entry->file_path) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                        Lihat File
+                                    </a>
+                                </div>
+                            @endif
+
                             <div class="mt-3">
                                 <a href="{{ route('portfolio.edit', $entry->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <form action="{{ route('portfolio.destroy', $entry->id) }}" method="POST" class="d-inline">

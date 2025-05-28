@@ -21,7 +21,7 @@
         </div>
     @endif
 
-    <form action="{{ route('portfolio.update', $portfolio->id) }}" method="POST">
+    <form action="{{ route('portfolio.update', $portfolio->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -46,6 +46,20 @@
             <label for="location" class="form-label">Lokasi</label>
             <input type="text" class="form-control" id="location" name="location"
                    value="{{ old('location', $portfolio->location) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="file" class="form-label">Upload File Baru (opsional)</label>
+            <input type="file" class="form-control" id="file" name="file" accept=".pdf,image/*">
+            <small class="text-muted">Boleh dikosongkan jika tidak ingin mengganti file.</small>
+
+            @if ($portfolio->file_path)
+                <div class="mt-2">
+                    <a href="{{ asset('storage/portfolio_files/' . $portfolio->file_path) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                        Lihat File Saat Ini
+                    </a>
+                </div>
+            @endif
         </div>
 
         <button type="submit" class="btn btn-primary">Update</button>

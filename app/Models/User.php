@@ -9,33 +9,86 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    // Menentukan kolom primary key yang digunakan
-    protected $primaryKey = 'user_id'; 
+    protected $primaryKey = 'user_id';
+    public $timestamps = true;
 
-    // Tentukan jika kamu tidak ingin menggunakan timestamps (optional)
-    public $timestamps = true; // Ini default-nya, jadi bisa dibiarkan true
-
-    // Menentukan kolom yang bisa diisi secara mass-assignment
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
-        'points',       // Tambahkan kolom points supaya bisa diupdate
+        'points',
     ];
 
-    // Menentukan kolom yang harus disembunyikan, seperti password dan token
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // Jika kamu ingin mengubah tipe primary key (contoh: non-integer)
     protected $keyType = 'int';
 
-    // Relasi 1-1 dengan referral program (user sebagai referrer)
     public function referralProgram()
     {
         return $this->hasOne(ReferralProgram::class, 'referrer_id', 'user_id');
+    }
+
+    public function certifications()
+    {
+        return $this->hasMany(Certification::class, 'user_id', 'user_id');
+    }
+
+    public function portfolios()
+    {
+        return $this->hasMany(Portfolio::class, 'user_id');
+    }
+
+    public function getLikedPortfolios()
+    {
+        if (!$this->profiledetails) {
+            return [];
+        }
+
+        $profileDetails = json_decode($this->profiledetails, true);
+        return $profileDetails['liked_portfolios'] ?? [];
+    }
+
+    public function likePortfolio($portfolioId)
+    {
+        $profileDetails = $this->profiledetails ? json_decode($this->profiledetails, true) : [];
+
+        $profileDetails['liked_portfolios'] = $profileDetails['liked_portfolios'] ?? [];
+
+        if (!in_array($portfolioId, $profileDetails['liked_portfolios'])) {
+            $profileDetails['liked_portfolios'][] = $portfolioId;
+            $this->profiledetails = json_encode($profileDetails);
+            $this->save();
+            return true;
+        }
+
+        return false;
+    }
+
+    public function unlikePortfolio($portfolioId)
+    {
+        if (!$this->profiledetails) {
+            return false;
+        }
+
+        $profileDetails = json_decode($this->profiledetails, true);
+
+        if (!isset($profileDetails['liked_portfolios'])) {
+            return false;
+        }
+
+        $key = array_search($portfolioId, $profileDetails['liked_portfolios']);
+        if ($key !== false) {
+            unset($profileDetails['liked_portfolios'][$key]);
+            $profileDetails['liked_portfolios'] = array_values($profileDetails['liked_portfolios']);
+            $this->profiledetails = json_encode($profileDetails);
+            $this->save();
+            return true;
+        }
+
+        return false;
     }
 }

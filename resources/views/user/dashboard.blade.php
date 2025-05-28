@@ -78,6 +78,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('forums.index') }}">Social Network</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('users.show', Auth::id()) }}"">Detail</a>
+            </li>
             
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>

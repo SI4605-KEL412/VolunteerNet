@@ -13,6 +13,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\UserController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -72,6 +73,12 @@ Route::middleware('auth')->group(function () {
     Route::get('manageusers/{id}/edit', [manageUserController::class, 'edit'])->name('manageusers.edit');
     Route::put('manageusers/{id}', [manageUserController::class, 'update'])->name('manageusers.update');
     Route::delete('manageusers/{id}', [manageUserController::class, 'destroy'])->name('manageusers.destroy');
+
+    // Detail user
+Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+
+// Update nama user
+Route::put('/users/{id}/update-name', [UserController::class, 'updateName'])->name('users.updateName');
 
     // Forum Routes
     Route::get('forums', [ForumController::class, 'index'])->name('forums.index');

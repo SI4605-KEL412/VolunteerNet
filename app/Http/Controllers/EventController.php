@@ -113,13 +113,4 @@ class EventController extends Controller
 
         return redirect()->route('events.index')->with('success', 'Event berhasil dihapus.');
     }
-    
-    public function bookmark(Event $event)
-    {
-        // Add bookmark logic here
-        // For example:
-        auth()->user()->bookmarkedEvents()->toggle($event->id);
-        
-        return back()->with('success', 'Event bookmark status updated successfully');
-    }
 }

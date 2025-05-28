@@ -63,12 +63,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Create Event</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('impacttracker.eo.index') }}">Impact Tracker</a>
+            </li>
             <!-- <li class="nav-item">
                 <a class="nav-link" href="#">Feedback</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Build Portofolio</a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="#">Notification</a>
             </li> -->

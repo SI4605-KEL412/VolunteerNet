@@ -95,9 +95,6 @@
             <li class="nav-item">
                 <a class="nav-link active" href="{{ route('events.index') }}">Manage Events</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="{{ route('bookmarks.index') }}">Bookmarks</a>
-            </li>
         </ul>
     </div>
 
@@ -154,7 +151,6 @@
                 </div>
             </div>
 
-            @auth
             <div class="mt-4 d-flex gap-2">
                 <a href="{{ route('events.index') }}" class="btn btn-secondary btn-action">
                     <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar
@@ -162,19 +158,6 @@
                 <a href="{{ route('events.edit', $event->event_id) }}" class="btn btn-warning btn-action">
                     <i class="fas fa-edit me-1"></i> Edit
                 </a>
-                <form method="POST" action="{{ route('events.bookmark', ['event' => $event->event_id]) }}" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-primary btn-action">
-                        <i class="fas fa-bookmark me-1"></i>
-                        {{ $event->isBookmarkedBy(auth()->user()) ? 'Unbookmark' : 'Bookmark' }}
-                    </button>
-                </form>
-                <form action="{{ route('events.bookmark', $event->event_id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-primary">
-                        <i class="fas fa-bookmark"></i> Bookmark
-                    </button>
-                </form>
                 <form action="{{ route('events.destroy', $event->event_id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
@@ -183,7 +166,6 @@
                     </button>
                 </form>
             </div>
-            @endauth
         </div>
     </div>
 

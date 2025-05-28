@@ -66,23 +66,37 @@
                 <a class="nav-link" href="{{ route('feedback.index') }}">Feedback</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('portfolio.index') }}">Build Portfolio</a>
+                <a class="nav-link" href="{{ route('volunfeeds.index') }}">VoluFeed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('user.notifications.index') }}">Notification</a>
             </li>
+
             <!-- Tombol Referral -->
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-info text-white" href="{{ route('referral.index') }}">Kode Referral Saya</a>
             </li>
+
             <!-- Tombol Recruitment User -->
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-success text-white" href="{{ route('recruitmentUser.index') }}">
                     <i class="bi bi-person-plus"></i> Recruitment Event
                 </a>
             </li>
+
+            <!-- Tombol Sertifikat -->
             <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
+                <a class="nav-link btn btn-warning text-white" href="{{ route('certifications.index') }}">Sertifikat Saya</a>
+            </li>
+
+            <!-- Link Social Network -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('forums.index') }}">Social Network</a>
+            </li>
+
+            <!-- Link ke EO Dashboard -->
+            <li class="nav-item mt-3">
+                <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
             </li>
         </ul>
     </div>

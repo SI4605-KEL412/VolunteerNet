@@ -13,6 +13,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\VolunFeedsController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -36,6 +37,25 @@ Route::middleware('auth')->group(function () {
     // Dashboard untuk User
     Route::get('dashboard/user', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
 
+
+    // volufeeds
+    Route::get('/volunfeeds', [App\Http\Controllers\VolunFeedsController::class, 'index'])->name('volunfeeds.index');
+
+    // Like/unlike portfolio
+    Route::post('/volunfeeds/{id}/like', [App\Http\Controllers\VolunFeedsController::class, 'toggleLike'])->name('volunfeeds.toggle-like');
+
+    // My portfolios list
+    Route::get('/volunfeeds/my-portfolios', [App\Http\Controllers\VolunFeedsController::class, 'myPortfolios'])->name('volunfeeds.my-portfolios');
+
+    // View portfolio details
+    Route::get('/volunfeeds/{id}', [App\Http\Controllers\VolunFeedsController::class, 'show'])->name('volunfeeds.show');
+
+    // View user profile
+    Route::get('user/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('user.profile');
+
+    // Add new route for volunfeeds.profile
+    Route::get('/volunfeeds/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('volunfeeds.profile');
+
     // User Notifications routes
     Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications.index');
     Route::post('/user/notifications/{id}/read', [UserNotificationController::class, 'markAsRead'])->name('user.notifications.read');
@@ -47,7 +67,7 @@ Route::middleware('auth')->group(function () {
     })->name('admin.dashboard');
 
     // Dashboard untuk EO
-    Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('dashboardEO');
+    Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('user.dashboardEO');
 
     // Admin Notifications routes
     Route::get('/admin/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');

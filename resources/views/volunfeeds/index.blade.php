@@ -93,7 +93,6 @@
             </li>
             <li class="nav-item mt-3">
                 <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
-            </li>
         </ul>
     </div>
 

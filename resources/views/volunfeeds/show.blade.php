@@ -92,7 +92,7 @@
                 <a class="nav-link" href="{{ route('user.notifications.index') }}">Notification</a>
             </li>
             <li class="nav-item mt-3">
-                <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
+                <a class="nav-link btn btn-light text-dark" href="{{ route('user.dashboardEO') }}">Go to EO Dashboard</a>
             </li>
         </ul>
     </div>
@@ -139,31 +139,11 @@
                                 </form>
                             @endauth
                         </div>
-
-                        @if(Auth::check() && Auth::id() === $portfolio->user_id)
-                            <div>
-                                <a href="{{ route('portfolio.edit', $portfolio->id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                <form action="{{ route('portfolio.destroy', $portfolio->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this portfolio?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                </form>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
                 <!-- Navigation Buttons -->
                 <div class="d-flex justify-content-between back-buttons">
                     <a href="{{ route('volunfeeds.index') }}" class="btn btn-secondary">
                         <i class="fa fa-arrow-left me-1"></i> Kembali ke VoluFeed
                     </a>
-
-                    @if(Auth::check() && Auth::id() === $portfolio->user_id)
-                        <a href="{{ route('volunfeeds.my-portfolios') }}" class="btn btn-primary">
-                            <i class="fa fa-folder-open me-1"></i> Portfolio Saya
-                        </a>
-                    @endif
                 </div>
 
             </div>

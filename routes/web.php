@@ -39,14 +39,12 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 // Public - Activities
 Route::get('activities', [ActivityController::class, 'index'])->name('activities.index');
 
-// Route yang butuh login
+// Routes yang butuh login
 Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('dashboard/user', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
     Route::get('dashboard/eo', [DashboardController::class, 'eoDashboard'])->name('user.dashboardEO');
-
-    // Dashboard Admin
     Route::get('dashboard/admin', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
@@ -62,13 +60,22 @@ Route::middleware('auth')->group(function () {
     });
 
     // VolunFeeds
-    Route::prefix('volunfeeds')->name('volunfeeds.')->group(function () {
-        Route::get('/', [VolunFeedsController::class, 'index'])->name('index');
-        Route::post('{id}/like', [VolunFeedsController::class, 'toggleLike'])->name('toggle-like');
-        Route::get('my-portfolios', [VolunFeedsController::class, 'myPortfolios'])->name('my-portfolios');
-        Route::get('{id}', [VolunFeedsController::class, 'show'])->name('show');
-        Route::get('profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('profile');
-    });
+    Route::get('/volunfeeds', [App\Http\Controllers\VolunFeedsController::class, 'index'])->name('volunfeeds.index');
+
+    // Like/unlike portfolio
+    Route::post('/volunfeeds/{id}/like', [App\Http\Controllers\VolunFeedsController::class, 'toggleLike'])->name('volunfeeds.toggle-like');
+
+    // My portfolios list
+    Route::get('/volunfeeds/my-portfolios', [App\Http\Controllers\VolunFeedsController::class, 'myPortfolios'])->name('volunfeeds.my-portfolios');
+
+    // View portfolio details
+    Route::get('/volunfeeds/{id}', [App\Http\Controllers\VolunFeedsController::class, 'show'])->name('volunfeeds.show');
+
+    // View user profile
+    Route::get('user/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('user.profile');
+
+    // Add new route for volunfeeds.profile
+    Route::get('/volunfeeds/profile/{userId}', [VolunFeedsController::class, 'showProfile'])->name('volunfeeds.profile');
 
     // User Notifications
     Route::prefix('user/notifications')->name('user.notifications.')->group(function () {
@@ -78,15 +85,13 @@ Route::middleware('auth')->group(function () {
     });
 
     // Event
-    Route::prefix('events')->name('events.')->group(function () {
-        Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::get('create', [EventController::class, 'create'])->name('create');
-        Route::post('/', [EventController::class, 'store'])->name('store');
-        Route::get('{id}', [EventController::class, 'show'])->name('show');
-        Route::get('{id}/edit', [EventController::class, 'edit'])->name('edit');
-        Route::put('{id}', [EventController::class, 'update'])->name('update');
-        Route::delete('{id}', [EventController::class, 'destroy'])->name('destroy');
-    });
+    Route::get('event/{id}', [EventController::class, 'show'])->name('event.show');
+    Route::get('events', [EventController::class, 'index'])->name('events.index');
+    Route::get('events/create', [EventController::class, 'create'])->name('events.create'); // Halaman buat event
+    Route::post('events', [EventController::class, 'store'])->name('events.store'); // Proses penyimpanan event
+    Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('events.edit'); // Halaman edit event
+    Route::put('events/{id}', [EventController::class, 'update'])->name('events.update'); // Proses update event
+    Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
 
     // Manage Users
     Route::prefix('manageusers')->name('manageusers.')->group(function () {
@@ -178,9 +183,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     // Bookmark
-    Route::resource('bookmarks', BookmarkController::class)->only([
-        'index', 'store', 'destroy'
-    ]);
+    Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
+    Route::post('/bookmarks', [BookmarkController::class, 'store'])->name('bookmarks.store');
+    Route::delete('/bookmarks/{bookmark}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
 
     // Impact Tracker
     // Impact Tracker EO (pindah ke dalam prefix eo)
@@ -192,5 +197,4 @@ Route::middleware('auth')->group(function () {
 
     // Impact Tracker User tetap di luar prefix
     Route::get('impacttracker', [ImpactTrackerController::class, 'userIndex'])->name('impacttracker.user.index');
-
 });

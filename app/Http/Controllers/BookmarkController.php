@@ -3,63 +3,89 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
+use App\Models\Event; // Pastikan model Event di-import
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect; 
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+// use Illuminate\Validation\Rule; // Bisa juga digunakan jika lebih disukai
 
 class BookmarkController extends Controller
 {
-    // Menampilkan semua bookmark user
+    /**
+     * Menampilkan semua bookmark milik pengguna yang sedang login.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
-        $bookmarks = Bookmark::where('user_id', Auth::id())->with('event')->latest()->get();
-        return view('bookmarks.index', compact('bookmarks'));
+        $userId = Auth::id();
+        $bookmarks = Bookmark::where('user_id', $userId)
+                            ->with('event') 
+                            ->latest('created_at') 
+                            ->paginate(9); 
+
+        // $unreadNotificationsCount = Auth::user()->unreadNotifications()->count(); 
+
+        return view('bookmarks.index', compact('bookmarks' /*, 'unreadNotificationsCount'*/));
     }
 
-    // Menyimpan bookmark baru
+    /**
+     * Menyimpan bookmark baru untuk pengguna yang sedang login.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
-        $userId = auth()->id();
+        // Validasi input event_id
+        $request->validate([
+            // PERBAIKAN DI SINI: Menggunakan nama tabel 'event' dan kolom 'event_id'
+            // sesuai dengan definisi di Model Event Anda.
+            'event_id' => 'required|integer|exists:event,event_id',
+        ]);
+
+        $userId = Auth::id();
         $eventId = $request->input('event_id');
 
-        // Cek apakah sudah ada bookmark
-        $exists = \App\Models\Bookmark::where('user_id', $userId)
-            ->where('event_id', $eventId)
-            ->exists();
+        $existingBookmark = Bookmark::where('user_id', $userId)
+                                    ->where('event_id', $eventId)
+                                    ->first();
 
-        if ($exists) {
-            return response()->json(['message' => 'Already bookmarked'], 409);
+        if ($existingBookmark) {
+            return Redirect::back()->with('info', 'Event ini sudah Anda bookmark sebelumnya.');
         }
 
-        \App\Models\Bookmark::create([
+        Bookmark::create([
             'user_id' => $userId,
             'event_id' => $eventId,
         ]);
 
-        return response()->json(['message' => 'Bookmarked']);
+        return Redirect::route('bookmarks.index')->with('success', 'Event berhasil ditambahkan ke bookmark!');
     }
 
-    // Menghapus bookmark
-    public function destroy($id)
+    /**
+     * Menghapus bookmark milik pengguna yang sedang login.
+     *
+     * @param  int  $id (bookmark_id)
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id) 
     {
         try {
-            // Mencari bookmark berdasarkan bookmark_id dan user_id yang sedang login.
-            // Jika tidak ditemukan, akan otomatis melempar 404.
-            $bookmark = Bookmark::where('bookmark_id', $id)->where('user_id', Auth::id())->firstOrFail();
+            $bookmark = Bookmark::where('bookmark_id', $id)
+                                ->where('user_id', Auth::id()) 
+                                ->firstOrFail();
 
-            // Menghapus bookmark.
             $bookmark->delete();
 
-            // Mengarahkan kembali ke halaman daftar bookmark dengan pesan sukses.
             return Redirect::route('bookmarks.index')->with('success', 'Bookmark berhasil dihapus!');
 
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Jika bookmark tidak ditemukan (misalnya ID salah atau bukan milik user),
-            // arahkan kembali dengan pesan error.
-            return Redirect::back()->with('error', 'Bookmark tidak ditemukan atau Anda tidak memiliki izin untuk menghapusnya.');
+        } catch (ModelNotFoundException $e) {
+            return Redirect::route('bookmarks.index')->with('error', 'Bookmark tidak ditemukan atau Anda tidak memiliki izin untuk menghapusnya.');
         } catch (\Exception $e) {
-            // Tangani error lain yang mungkin terjadi saat penghapusan.
-            return Redirect::back()->with('error', 'Gagal menghapus bookmark: ' . $e->getMessage());
+            // \Illuminate\Support\Facades\Log::error('Gagal menghapus bookmark: ' . $e->getMessage()); 
+            return Redirect::route('bookmarks.index')->with('error', 'Gagal menghapus bookmark. Silakan coba lagi.');
         }
     }
 }

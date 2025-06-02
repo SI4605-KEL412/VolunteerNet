@@ -13,7 +13,7 @@
                 extend: {
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-in': 'slideIn 0.5s ease-out', // Untuk sidebar
+                        'slide-in': 'slideIn 0.5s ease-out',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
@@ -22,15 +22,34 @@
                 }
             },
             plugins: [
-                require('@tailwindcss/typography'), // Untuk styling teks jika ada HTML
+                require('@tailwindcss/typography'),
             ],
         }
     </script>
     <style>
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1e293b; /* slate-800 */ }
-        ::-webkit-scrollbar-thumb { background: #3b82f6; /* blue-500 */ border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #2563eb; /* blue-600 */ }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+        /* Button utama agar lebih besar dan konsisten */
+        .btn-main {
+            min-width: 210px;
+            width: 210px;
+            max-width: 100%;
+            justify-content: center;
+            display: flex;
+            font-size: 1.08rem !important;
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+            border-radius: 0.75rem !important;
+            font-weight: 600;
+        }
+        @media (max-width: 640px) {
+            .btn-main {
+                min-width: 100%;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -177,11 +196,11 @@
                 </dl>
                 
                 <div class="px-6 py-5 border-t border-slate-700/50 bg-slate-800/20 flex flex-col sm:flex-row justify-between items-center gap-3">
-                    <a href="{{ route('recruitmentUser.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-colors duration-200 font-medium text-sm shadow-md">
-                        <i class="bi bi-arrow-left-short mr-1.5 text-lg"></i> Kembali ke Daftar
+                    <a href="{{ route('recruitmentUser.index') }}" class="btn-main bg-slate-700 text-white hover:bg-slate-800 transition-colors duration-200 shadow-md">
+                        <i class="bi bi-arrow-left-short mr-2 text-lg"></i> Kembali ke Daftar
                     </a>
-                    <a href="{{ route('user.dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 border border-sky-600/70 text-sky-300 rounded-xl hover:bg-sky-700/30 hover:text-sky-200 hover:border-sky-500/80 transition-all duration-200 font-medium text-sm shadow-md">
-                        <i class="bi bi-house-door-fill mr-1.5 text-lg"></i> Ke Dashboard Utama
+                    <a href="{{ route('user.dashboard') }}" class="btn-main bg-sky-700 text-white hover:bg-sky-800 transition-colors duration-200 shadow-md">
+                        <i class="bi bi-house-door-fill mr-2 text-lg"></i> Ke Dashboard Utama
                     </a>
                 </div>
             </div>

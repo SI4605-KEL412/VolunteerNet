@@ -59,16 +59,40 @@ class RecruitmentController extends Controller
     // Fitur User (Peserta)
     // ===========================
 
-    // Menampilkan daftar event & status pendaftaran user yang login
-    public function userIndex()
+    // Menampilkan daftar event & status pendaftaran user yang login + search & filter
+    public function userIndex(Request $request)
     {
         $userId = auth()->id();
-        $events = Event::orderBy('start_date')->get();
+
+        // Ambil parameter search dan filter
+        $search = $request->input('search');
+        $status = $request->input('status');
+
+        // Query event dengan filter/search
+        $eventsQuery = Event::query();
+
+        if ($search) {
+            $eventsQuery->where('title', 'like', '%' . $search . '%');
+        }
+
+        if ($request->filled('start_date')) {
+            $eventsQuery->whereDate('start_date', '>=', $request->input('start_date'));
+        }
+        if ($request->filled('end_date')) {
+            $eventsQuery->whereDate('end_date', '<=', $request->input('end_date'));
+        }
+
+        $events = $eventsQuery->orderBy('start_date')->get();
 
         // Ambil semua recruitment milik user, keyBy event_id untuk akses cepat
-        $userRecruitments = Recruitment::where('user_id', $userId)->get()->keyBy('event_id');
+        $userRecruitments = Recruitment::where('user_id', $userId)
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->get()
+            ->keyBy('event_id');
 
-        return view('recruitmentUser.index', compact('events', 'userRecruitments'));
+        return view('recruitmentUser.index', compact('events', 'userRecruitments', 'search', 'status'));
     }
 
     // Menampilkan form pendaftaran event untuk user

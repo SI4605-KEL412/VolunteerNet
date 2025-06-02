@@ -15,6 +15,12 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    fontSize: {
+                        'base': '1.08rem',
+                        'lg': '1.22rem',
+                        'xl': '1.35rem',
+                        '2xl': '1.7rem',
+                    },
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-in-out',
                         'slide-in': 'slideIn 0.5s ease-out', 
@@ -35,6 +41,104 @@
         ::-webkit-scrollbar-track { background: #1e293b; }
         ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+        body, .text-slate-200 { font-size: 1.08rem !important; }
+        .text-base, .text-slate-300, .text-slate-400, .text-slate-50, .text-white { font-size: 1.08rem !important; }
+        .text-xl { font-size: 1.35rem !important; }
+        .text-2xl { font-size: 1.7rem !important; }
+        .text-3xl { font-size: 2.1rem !important; }
+        .text-4xl { font-size: 2.5rem !important; }
+        .px-3\.5, .py-1\.5, .px-6, .py-2\.5 { font-size: 1.08rem !important; }
+        .rounded-lg, .rounded-xl, .rounded-2xl { border-radius: 0.75rem !important; }
+        .line-clamp-2, .line-clamp-3 { font-size: 1.08rem !important; }
+        .event-status span, .event-status { font-size: 1.08rem !important; }
+        .action-btn, .nav-item { font-size: 1.08rem !important; }
+        .sm\:text-sm, .md\:text-sm, .lg\:text-sm, .xl\:text-sm { font-size: 1.08rem !important; }
+        .sm\:text-base, .md\:text-base, .lg\:text-base, .xl\:text-base { font-size: 1.22rem !important; }
+        @media (max-width: 640px) {
+            .text-3xl { font-size: 1.5rem !important; }
+            .text-2xl { font-size: 1.2rem !important; }
+            .text-xl { font-size: 1.08rem !important; }
+        }
+        .btn-action {
+            min-width: 210px;
+            max-width: 100%;
+            width: 210px;
+            justify-content: center;
+            display: flex;
+        }
+        .filter-card {
+            background: #1e293b;
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.15);
+            border: 1.5px solid #334155;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .filter-label {
+            color: #a5b4fc;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        .filter-input, .filter-select {
+            background: #192132 !important;
+            border: 1.5px solid #334155 !important;
+            color: #fff !important;
+            border-radius: 0.75rem !important;
+            font-size: 1.08rem !important;
+        }
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 0 2px #38bdf8;
+        }
+        .filter-btn {
+            background: #06b6d4;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            padding: 0.75rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.08rem;
+            transition: background 0.2s;
+        }
+        .filter-btn:hover {
+            background: #0284c7;
+        }
+        .filter-reset-btn {
+            background: #334155;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            padding: 0.75rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.08rem;
+            transition: background 0.2s;
+        }
+        .filter-reset-btn:hover {
+            background: #1e293b;
+        }
+        /* Perlebar card dan grid 2 kolom */
+        .event-card {
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .event-card {
+                max-width: 650px;
+            }
+        }
+        @media (min-width: 1280px) {
+            .event-card {
+                max-width: 700px;
+            }
+        }
     </style>
 </head>
 
@@ -54,7 +158,7 @@
         </div>
         <nav class="p-4 space-y-2">
             <div class="space-y-1">
-                 <a href="{{ route('activities.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('activities.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                <a href="{{ route('activities.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('activities.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-calendar-event mr-3 text-blue-400 group-hover:scale-110 transition-transform"></i>
                     <span>Activities</span>
                 </a>
@@ -77,7 +181,7 @@
                     <i class="bi bi-people mr-3 text-purple-400 group-hover:scale-110 transition-transform"></i>
                     <span>Social Network</span>
                 </a>
-                 <a href="{{ route('users.show', Auth::check() ? Auth::id() : 1) }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ (Auth::check() && Auth::id() == (request()->route('user') ? request()->route('user')->user_id : (isset($user) ? $user->user_id : null)) && (request()->routeIs('users.show') || request()->routeIs('user.profile'))) ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                <a href="{{ route('users.show', Auth::check() ? Auth::id() : 1) }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ (Auth::check() && Auth::id() == (request()->route('user') ? request()->route('user')->user_id : (isset($user) ? $user->user_id : null)) && (request()->routeIs('users.show') || request()->routeIs('user.profile'))) ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-person-circle mr-3 text-indigo-400 group-hover:scale-110 transition-transform"></i>
                     <span>Profile Details</span>
                 </a>
@@ -99,7 +203,7 @@
                     <i class="bi bi-bar-chart-line-fill mr-2"></i>
                     <span>Impact Tracker Saya</span>
                 </a>
-                 <a href="{{ route('user.dashboardEO') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                <a href="{{ route('user.dashboardEO') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
                     <i class="bi bi-gear mr-2"></i>
                     <span>Go to EO Dashboard</span>
                 </a>
@@ -142,7 +246,51 @@
                 </div>
             @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 animate-fade-in">
+            {{-- Form Search & Filter --}}
+            <div class="filter-card max-w-5xl mx-auto">
+                <form method="GET" class="flex flex-wrap gap-6 items-end">
+                    <div class="flex flex-col flex-1 min-w-[200px]">
+                        <label class="filter-label" for="search"><i class="bi bi-search mr-1"></i>Nama Event</label>
+                        <select name="search" id="search" class="filter-select px-4 py-2">
+                            <option value="">-- Pilih Event --</option>
+                            @foreach($events as $eventOption)
+                                <option value="{{ $eventOption->title }}" {{ request('search') == $eventOption->title ? 'selected' : '' }}>
+                                    {{ $eventOption->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex flex-col flex-1 min-w-[180px]">
+                        <label class="filter-label" for="status"><i class="bi bi-funnel-fill mr-1"></i>Status</label>
+                        <select name="status" id="status" class="filter-select px-4 py-2">
+                            <option value="">Semua Status</option>
+                            <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
+                            <option value="accepted" {{ request('status')=='accepted'?'selected':'' }}>Diterima</option>
+                            <option value="rejected" {{ request('status')=='rejected'?'selected':'' }}>Ditolak</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col flex-1 min-w-[180px]">
+                        <label class="filter-label" for="start_date"><i class="bi bi-calendar-date mr-1"></i>Tanggal Mulai</label>
+                        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="filter-input px-4 py-2" placeholder="dd/mm/yyyy" />
+                    </div>
+                    <div class="flex flex-col flex-1 min-w-[180px]">
+                        <label class="filter-label" for="end_date"><i class="bi bi-calendar-date mr-1"></i>Tanggal Selesai</label>
+                        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="filter-input px-4 py-2" placeholder="dd/mm/yyyy" />
+                    </div>
+                    <div class="flex flex-row gap-2 mt-6">
+                        <button type="submit" class="filter-btn">
+                            <i class="bi bi-search"></i> Cari
+                        </button>
+                        @if(request()->hasAny(['search','status','start_date','end_date']))
+                            <a href="{{ route('recruitmentUser.index') }}" class="filter-reset-btn">
+                                <i class="bi bi-x-circle"></i> Reset
+                            </a>
+                        @endif
+                    </div>
+                </form>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
                 @forelse($events as $i => $event)
                     @php
                         $recruitment = $userRecruitments->get($event->event_id);
@@ -155,20 +303,27 @@
                             }
                         }
                     @endphp
-                    <div class="bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl border border-slate-700/50 flex flex-col overflow-hidden hover:border-emerald-500/70 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5">
-                        <div class="flex flex-col flex-grow p-6">
+                    <div class="event-card bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl border border-slate-700/50 flex flex-col overflow-hidden hover:border-emerald-500/70 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5">
+                        <div class="flex flex-col flex-grow p-8">
                             <div class="mb-3">
-                                <h2 class="text-xl font-bold text-slate-50 hover:text-emerald-400 transition-colors line-clamp-2 mb-1">
+                                <h2 class="text-2xl font-bold text-slate-50 hover:text-emerald-400 transition-colors line-clamp-2 mb-1">
                                     {{ $event->title }}
                                 </h2>
-                                <p class="text-sm text-slate-300 leading-relaxed line-clamp-3">{{ Str::limit($event->description, 100) }}</p>
+                                <p class="text-base text-slate-300 leading-relaxed line-clamp-3">{{ Str::limit($event->description, 180) }}</p>
                             </div>
                             <div class="text-xs text-slate-400 space-y-1.5 mb-4">
                                 <div class="flex items-center">
                                     <i class="bi bi-calendar3 mr-2 text-sky-400"></i>
-                                    {{ isset($event->start_date) ? \Carbon\Carbon::parse($event->start_date)->isoFormat('D MMM YY') : '-' }}
+                                    <span>
+                                        <span class="font-semibold text-sky-300">Mulai:</span>
+                                        {{ isset($event->start_date) ? \Carbon\Carbon::parse($event->start_date)->isoFormat('D MMM YYYY') : '-' }}
+                                    </span>
                                     @if(isset($event->end_date) && $event->end_date != $event->start_date)
-                                        &ndash; {{ \Carbon\Carbon::parse($event->end_date)->isoFormat('D MMM YY') }}
+                                        <span class="mx-2 text-slate-500">|</span>
+                                        <span>
+                                            <span class="font-semibold text-sky-300">Selesai:</span>
+                                            {{ \Carbon\Carbon::parse($event->end_date)->isoFormat('D MMM YYYY') }}
+                                        </span>
                                     @endif
                                 </div>
                                 @if(isset($event->location))
@@ -199,53 +354,55 @@
                                 @endif
                             </div>
 
-                            <div class="mt-auto pt-4 border-t border-slate-700/50 flex flex-wrap gap-2 justify-start">
-                                @if($recruitment)
-                                    <a href="{{ route('recruitmentUser.show', $recruitment->recruitment_id) }}" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-sky-600/80 hover:bg-sky-700/90 text-white">
-                                        <i class="bi bi-info-circle-fill mr-1.5"></i> Detail Pendaftaran
-                                    </a>
-                                    @if($recruitment->status == 'pending')
-                                        <a href="{{ route('recruitmentUser.edit', $recruitment->recruitment_id) }}" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-amber-500/80 hover:bg-amber-600/90 text-slate-900">
-                                            <i class="bi bi-pencil-square mr-1.5"></i> Edit Pendaftaran
+                            <div class="mt-auto pt-4 border-t border-slate-700/50">
+                                <div class="flex flex-wrap gap-2 justify-start items-center">
+                                    @if($recruitment)
+                                        <a href="{{ route('recruitmentUser.show', $recruitment->recruitment_id) }}" class="btn-action flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-sky-600/80 hover:bg-sky-700/90 text-white">
+                                            <i class="bi bi-info-circle-fill mr-1.5"></i> Detail Pendaftaran
                                         </a>
-                                        <form action="{{ route('recruitmentUser.destroy', $recruitment->recruitment_id) }}" method="POST" class="contents" onsubmit="return confirm('Yakin ingin membatalkan pendaftaran ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-rose-600/80 hover:bg-rose-700/90 text-white">
-                                                <i class="bi bi-trash3-fill mr-1.5"></i> Batalkan
-                                            </button>
-                                        </form>
-                                    @endif
-                                @else
-                                    <a href="{{ route('recruitmentUser.create', ['event_id' => $event->event_id]) }}" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-emerald-600/80 hover:bg-emerald-700/90 text-white">
-                                        <i class="bi bi-person-plus-fill mr-1.5"></i> Daftar Event Ini
-                                    </a>
-                                @endif
-                                
-                                @auth
-                                    @if($isBookmarked && $bookmarkEntryId)
-                                        <form action="{{ route('bookmarks.destroy', $bookmarkEntryId) }}" method="POST" class="contents">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-rose-500/80 hover:bg-rose-600/90 text-white" title="Hapus Bookmark">
-                                                <i class="bi bi-bookmark-x-fill mr-1.5"></i> Hapus Bookmark
-                                            </button>
-                                        </form>
+                                        @if($recruitment->status == 'pending')
+                                            <a href="{{ route('recruitmentUser.edit', $recruitment->recruitment_id) }}" class="btn-action flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-amber-500/80 hover:bg-amber-600/90 text-slate-900">
+                                                <i class="bi bi-pencil-square mr-1.5"></i> Edit Pendaftaran
+                                            </a>
+                                            <form action="{{ route('recruitmentUser.destroy', $recruitment->recruitment_id) }}" method="POST" class="contents" onsubmit="return confirm('Yakin ingin membatalkan pendaftaran ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-action flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-rose-600/80 hover:bg-rose-700/90 text-white">
+                                                    <i class="bi bi-trash3-fill mr-1.5"></i> Cancel Pendaftaran
+                                                </button>
+                                            </form>
+                                        @endif
                                     @else
-                                        <form action="{{ route('bookmarks.store') }}" method="POST" class="contents">
-                                            @csrf
-                                            <input type="hidden" name="event_id" value="{{ $event->event_id }}">
-                                            <button type="submit" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-indigo-600/80 hover:bg-indigo-700/90 text-white" title="Bookmark Event Ini">
-                                                <i class="bi bi-bookmark-plus-fill mr-1.5"></i> Bookmark
-                                            </button>
-                                        </form>
+                                        <a href="{{ route('recruitmentUser.create', ['event_id' => $event->event_id]) }}" class="btn-action flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-emerald-600/80 hover:bg-emerald-700/90 text-white">
+                                            <i class="bi bi-person-plus-fill mr-1.5"></i> Daftar Event Ini
+                                        </a>
                                     @endif
-                                @endauth
-                                @guest
-                                    <a href="{{route('login')}}" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-slate-600/70 hover:bg-slate-500/70 text-slate-300" title="Login untuk Bookmark">
-                                        <i class="bi bi-bookmark-plus mr-1.5"></i> Bookmark
-                                    </a>
-                                @endguest
+                                    
+                                    @auth
+                                        @if($isBookmarked && $bookmarkEntryId)
+                                            <form action="{{ route('bookmarks.destroy', $bookmarkEntryId) }}" method="POST" class="contents">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-action flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-rose-500/80 hover:bg-rose-600/90 text-white" title="Hapus Bookmark">
+                                                    <i class="bi bi-bookmark-x-fill mr-1.5"></i> Hapus Bookmark
+                                                </button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('bookmarks.store') }}" method="POST" class="contents">
+                                                @csrf
+                                                <input type="hidden" name="event_id" value="{{ $event->event_id }}">
+                                                <button type="submit" class="btn-action flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-indigo-600/80 hover:bg-indigo-700/90 text-white" title="Bookmark Event Ini">
+                                                    <i class="bi bi-bookmark-plus-fill mr-1.5"></i> Bookmark
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endauth
+                                    @guest
+                                        <a href="{{route('login')}}" class="btn-action flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-slate-600/70 hover:bg-slate-500/70 text-slate-300" title="Login untuk Bookmark">
+                                            <i class="bi bi-bookmark-plus mr-1.5"></i> Bookmark
+                                        </a>
+                                    @endguest
+                                </div>
                             </div>
                         </div>
                     </div>

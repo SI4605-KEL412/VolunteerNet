@@ -1,134 +1,271 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $forum->title }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ $forum->title }} - Forum Diskusi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-in': 'slideIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideIn: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(0)' } },
+                    }
+                }
+            },
+            plugins: [
+                require('@tailwindcss/typography'),
+                require('@tailwindcss/forms'),
+            ],
+        }
+    </script>
     <style>
-        body {
-            background: linear-gradient(to bottom, #0066cc, #f0f8ff);
-            color: #003366;
-        }
-
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #004080;
-            color: white;
-        }
-
-        .content {
-            margin-left: 250px;
-        }
-
-        .card-body small {
-            display: block;
-            margin-top: 5px;
-        }
-
-        .card-body .btn {
-            font-size: 0.8rem;
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; /* slate-800 */ }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; /* blue-500 */ border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2563eb; /* blue-600 */ }
     </style>
 </head>
-<body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-    <div class="d-flex justify-content-between align-items-center p-3">
-        <a href="{{ route('user.dashboard') }}" class="text-white text-decoration-none fs-5">
-            Dashboard
-        </a>
-    </div>
-    <ul class="nav flex-column p-3">
-        <li class="nav-item">
-            <a class="nav-link" href="#">Activities</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Feedback</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Build Portfolio</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Notification</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('forums.index') }}">Social Network</a>
-        </li>
-        <li class="nav-item mt-3">
-            <a class="nav-link btn btn-light text-dark" href="{{ route('admin.dashboard') }}">Go to EO Dashboard</a>
-        </li>
-    </ul>
-</div>
+<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen text-slate-200">
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg">
+        <i class="bi bi-list text-xl"></i>
+    </button>
 
-<!-- Main Content -->
-<div class="content p-4">
-    <div class="container mt-5">
-
-        <!-- Detail Forum -->
-        <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-                <h3>{{ $forum->title }}</h3>
-                <p>{!! nl2br(e($forum->content)) !!}</p>
-                <small class="text-muted">Oleh: {{ $forum->user->name ?? 'Anonim' }} - {{ $forum->created_at->diffForHumans() }}</small>
-
-                @if ($forum->user_id === auth()->id())
-                    <div class="mt-2">
-                        <a href="{{ route('forums.edit', $forum) }}" class="btn btn-sm btn-warning me-2">Edit</a>
-                        <form action="{{ route('forums.destroy', $forum) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
-                        </form>
-                    </div>
-                @endif
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-slate-800 to-slate-900 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40 shadow-2xl">
+        <div class="p-6 border-b border-slate-700">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="bi bi-speedometer2 text-white"></i>
+                </div>
+                <h2 class="text-xl font-bold text-white">Dashboard</h2>
             </div>
         </div>
+        <nav class="p-4 space-y-2">
+            <div class="space-y-1">
+                 <a href="{{ route('activities.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('activities.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-calendar-event mr-3 text-blue-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Activities</span>
+                </a>
+                <a href="{{ route('feedback.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('feedback.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-chat-square-text mr-3 text-green-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Feedback</span>
+                </a>
+                <a href="{{ route('volunfeeds.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('volunfeeds.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-rss mr-3 text-yellow-400 group-hover:scale-110 transition-transform"></i>
+                    <span>VoluFeed</span>
+                </a>
+                <a href="{{ route('user.notifications.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('user.notifications.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-bell mr-3 text-red-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Notifications</span>
+                    @if(isset($unreadNotificationsCount) && $unreadNotificationsCount > 0)
+                        <span class="ml-auto bg-red-500 text-xs px-2 py-1 rounded-full">{{ $unreadNotificationsCount }}</span>
+                    @endif
+                </a>
+                <a href="{{ route('forums.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('forums.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-people mr-3 text-purple-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Social Network</span>
+                </a>
+                <a href="{{ route('users.show', Auth::check() ? Auth::id() : 1) }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ (Auth::check() && request()->user()->id == (request()->route('userId') ?? Auth::id()) && (request()->routeIs('users.show') || request()->routeIs('user.profile'))) ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-person-circle mr-3 text-indigo-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Profile Details</span>
+                </a>
+            </div>
+            <div class="pt-4 space-y-3 border-t border-slate-700">
+                 <a href="{{ route('referral.index') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-share mr-2"></i>
+                    <span>Kode Referral Saya</span>
+                </a>
+                <a href="{{ route('recruitmentUser.index') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-person-plus mr-2"></i>
+                    <span>Recruitment Event</span>
+                </a>
+                <a href="{{ route('certifications.index') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-award mr-2"></i>
+                    <span>Sertifikat Saya</span>
+                </a>
+                <a href="{{ route('user.dashboardEO') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-gear mr-2"></i>
+                    <span>Go to EO Dashboard</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
 
-        <!-- Daftar Komentar -->
-        <h4>Komentar</h4>
+    <div class="lg:ml-64 min-h-screen">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            
+            <div class="mb-8">
+                 <a href="{{ route('forums.index') }}" class="inline-flex items-center px-5 py-2.5 border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-colors duration-200 transform hover:scale-105 text-sm font-medium shadow-md">
+                    <i class="bi bi-arrow-left-circle-fill mr-2"></i>
+                    <span>Kembali ke Daftar Forum</span>
+                </a>
+            </div>
 
-        @forelse ($forum->comments as $comment)
-            <div class="card mb-2">
-                <div class="card-body">
-                    <strong>{{ $comment->user->name ?? 'Anonim' }}</strong>
-                    <p class="mb-1">{{ $comment->content }}</p>
-                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+            <article class="bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl border border-slate-700/50 mb-10 animate-fade-in">
+                <div class="p-6 md:p-8">
+                    <h1 class="text-3xl lg:text-4xl font-extrabold text-slate-50 mb-5 leading-tight">{{ $forum->title }}</h1>
+                    
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-400 mb-6 pb-6 border-b border-slate-700/50">
+                        <div class="flex items-center">
+                            <i class="bi bi-person-circle mr-1.5 text-lg text-indigo-400"></i>
+                            Oleh: <strong class="ml-1 text-slate-300">{{ $forum->user->name ?? 'Anonim' }}</strong>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="bi bi-clock-history mr-1.5 text-lg text-sky-400"></i>
+                            {{ $forum->created_at->isoFormat('LLLL') }} ({{ $forum->created_at->diffForHumans() }})
+                        </div>
+                         {{-- Jika ada kategori
+                        @if($forum->category)
+                        <div class="flex items-center">
+                            <i class="bi bi-tag-fill mr-1.5 text-lg text-amber-400"></i>
+                            Kategori: <strong class="ml-1 text-slate-300">{{ $forum->category->name }}</strong>
+                        </div>
+                        @endif
+                        --}}
+                    </div>
+                    
+                    <div class="prose prose-lg prose-invert max-w-none text-slate-200/90 leading-relaxed">
+                        {!! nl2br(e($forum->content)) !!} {{-- Aman untuk teks biasa dengan nl2br --}}
+                    </div>
 
-                    @if ($comment->user_id === auth()->id())
-                        <div class="mt-2">
-                            <a href="{{ route('comments.edit', $comment) }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-                            <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="d-inline">
+                    @if (Auth::check() && $forum->user_id === Auth::id())
+                        <div class="mt-8 pt-6 border-t border-slate-700/50 flex flex-wrap gap-3">
+                            <a href="{{ route('forums.edit', $forum) }}" class="inline-flex items-center bg-yellow-500/80 hover:bg-yellow-600/80 text-slate-900 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-md hover:shadow-lg">
+                                <i class="bi bi-pencil-square mr-2"></i>Edit Topik
+                            </a>
+                            <form action="{{ route('forums.destroy', $forum) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus topik ini beserta seluruh balasannya?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
+                                <button type="submit" class="inline-flex items-center bg-red-600/80 hover:bg-red-700/80 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-md hover:shadow-lg">
+                                    <i class="bi bi-trash3-fill mr-2"></i>Hapus Topik
+                                </button>
                             </form>
                         </div>
                     @endif
                 </div>
-            </div>
-        @empty
-            <p class="text-muted">Belum ada komentar.</p>
-        @endforelse
+            </article>
 
-        <!-- Form Tambah Komentar -->
-        <h5 class="mt-4">Tambah Komentar</h5>
-        <form action="{{ route('comments.store', $forum) }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <textarea name="content" class="form-control" rows="3" placeholder="Tulis komentar..." required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Kirim</button>
-        </form>
+            <section class="animate-fade-in" style="animation-delay: 0.1s;">
+                <h2 class="text-2xl font-semibold text-slate-100 mb-6 mt-12 pt-8 border-t border-slate-700/50 flex items-center">
+                    <i class="bi bi-chat-right-text-fill mr-3 text-purple-400"></i> Komentar ({{ $forum->comments->count() }})
+                </h2>
 
+                <div class="space-y-5">
+                    @forelse ($forum->comments()->latest()->get() as $comment) {{-- Menampilkan komentar terbaru dulu --}}
+                        <div class="bg-slate-800/50 backdrop-blur-sm shadow-lg rounded-xl border border-slate-700/40 p-5">
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0">
+                                    {{-- Placeholder avatar, bisa diganti dengan gambar user jika ada --}}
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-slate-400 font-semibold text-lg">
+                                        {{ substr($comment->user->name ?? 'A', 0, 1) }}
+                                    </div>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-semibold text-blue-400 text-sm">{{ $comment->user->name ?? 'Anonim' }}</span>
+                                        <small class="text-xs text-slate-500">{{ $comment->created_at->diffForHumans() }}</small>
+                                    </div>
+                                    <div class="text-slate-200 text-base leading-relaxed prose prose-sm prose-invert max-w-none comment-content">
+                                         {!! nl2br(e($comment->content)) !!}
+                                    </div>
+
+                                    @if (Auth::check() && $comment->user_id === Auth::id())
+                                        <div class="mt-3 flex space-x-3">
+                                            {{-- Tombol Edit & Hapus Komentar bisa ditambahkan di sini jika ada route-nya --}}
+                                            {{-- <a href="{{ route('comments.edit', $comment->id) }}" class="text-xs text-yellow-400 hover:text-yellow-300 font-medium inline-flex items-center"><i class="bi bi-pencil-fill mr-1"></i> Edit</a> --}}
+                                            {{-- <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin hapus komentar ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-xs text-red-400 hover:text-red-300 font-medium inline-flex items-center"><i class="bi bi-trash3-fill mr-1"></i> Hapus</button>
+                                            </form> --}}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-10 text-slate-400 bg-slate-800/40 rounded-xl border border-dashed border-slate-700">
+                            <i class="bi bi-chat-dots text-4xl mb-3 text-slate-500"></i>
+                            <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+                        </div>
+                    @endforelse
+                </div>
+            </section>
+
+            <section class="mt-10 pt-8 border-t border-slate-700/50 animate-fade-in" style="animation-delay: 0.2s;">
+                <h3 class="text-xl font-semibold text-slate-100 mb-5 flex items-center">
+                    <i class="bi bi-send-plus-fill mr-3 text-purple-400"></i> Tambahkan Komentar Anda
+                </h3>
+                <div class="bg-slate-800/50 backdrop-blur-sm shadow-xl rounded-xl border border-slate-700/40 p-6">
+                    @auth
+                    <form action="{{ route('comments.store', $forum) }}" method="POST" class="space-y-4">
+                        @csrf
+                        <div>
+                            <label for="comment_content" class="sr-only">Komentar Anda</label>
+                            <textarea name="content" id="comment_content" rows="4" class="form-textarea block w-full bg-slate-700/60 border-slate-600 placeholder-slate-400/70 text-slate-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 rounded-lg shadow-sm text-sm px-4 py-3 min-h-[120px] resize-y" placeholder="Tulis komentar Anda di sini..." required></textarea>
+                             @error('content') {{-- Error untuk field content komentar --}}
+                                <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="inline-flex items-center justify-center px-7 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl hover:from-purple-600 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-xl font-semibold text-sm">
+                                <i class="bi bi-send-fill mr-2"></i> Kirim Komentar
+                            </button>
+                        </div>
+                    </form>
+                    @else
+                    <div class="text-center py-6 border border-dashed border-slate-700 rounded-lg">
+                        <p class="text-slate-300">Silakan <a href="{{ route('login') }}" class="font-semibold text-purple-400 hover:text-purple-300 underline">login</a> atau <a href="{{ route('register') }}" class="font-semibold text-purple-400 hover:text-purple-300 underline">daftar</a> untuk mengirim komentar.</p>
+                    </div>
+                    @endauth
+                </div>
+            </section>
+
+        </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Skrip untuk mobile menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        if (mobileMenuBtn && sidebar && sidebarOverlay) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+        }
+        // Skrip untuk animasi item navigasi sidebar
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if (!item.classList.contains('bg-slate-700')) { item.style.transform = 'translateX(4px)'; }
+            });
+            item.addEventListener('mouseleave', () => { item.style.transform = 'translateX(0)'; });
+        });
+        // Skrip untuk animasi tombol aksi sidebar
+         document.querySelectorAll('.action-btn').forEach(btn => {
+            const originalBoxShadow = btn.style.boxShadow || '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+            btn.addEventListener('mouseenter', () => { btn.style.boxShadow = '0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1)'; });
+            btn.addEventListener('mouseleave', () => { btn.style.boxShadow = originalBoxShadow; });
+        });
+    </script>
 </body>
 </html>

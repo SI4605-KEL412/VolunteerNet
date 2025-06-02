@@ -14,6 +14,7 @@ class Portfolio extends Model
         'description',
         'date',
         'location',
+        'file_path',
     ];
 
     public function user()

@@ -1,14 +1,10 @@
-@php
-    use Illuminate\Support\Str;
-@endphp
-
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Portofolio Saya - User Dashboard</title>
+    <title>Impact Tracker Saya - User Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script>
@@ -26,7 +22,7 @@
                 }
             },
             plugins: [
-                require('@tailwindcss/line-clamp'),
+                // require('@tailwindcss/forms'), // Tidak ada form input langsung di tabel ini
             ],
         }
     </script>
@@ -39,6 +35,11 @@
 </head>
 
 <body class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen text-slate-200">
+    @php
+        // Asumsi $isOwnProfile digunakan di sidebar jika ini bagian dari tampilan profil user
+        // Untuk halaman ini, kita mungkin tidak memerlukannya secara langsung kecuali untuk logika sidebar yang sangat spesifik.
+        // $isOwnProfile = (Auth::check() && Auth::id() == ($user->user_id ?? Auth::id()));
+    @endphp
     <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg">
         <i class="bi bi-list text-xl"></i>
     </button>
@@ -54,7 +55,7 @@
         </div>
         <nav class="p-4 space-y-2">
             <div class="space-y-1">
-                 <a href="{{ route('activities.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('activities.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                 <a href="{{ route('activities.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('impacttracker.user.index') || request()->routeIs('activities.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-calendar-event mr-3 text-blue-400 group-hover:scale-110 transition-transform"></i>
                     <span>Activities</span>
                 </a>
@@ -62,9 +63,9 @@
                     <i class="bi bi-chat-square-text mr-3 text-green-400 group-hover:scale-110 transition-transform"></i>
                     <span>Feedback</span>
                 </a>
-                <a href="{{ route('volunfeeds.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('volunfeeds.*') || request()->routeIs('portfolio.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                <a href="{{ route('volunfeeds.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('volunfeeds.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-rss mr-3 text-yellow-400 group-hover:scale-110 transition-transform"></i>
-                    <span>VoluFeed & Portfolio</span>
+                    <span>VoluFeed</span>
                 </a>
                 <a href="{{ route('user.notifications.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('user.notifications.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-bell mr-3 text-red-400 group-hover:scale-110 transition-transform"></i>
@@ -95,10 +96,6 @@
                     <i class="bi bi-award-fill mr-2"></i>
                     <span>Sertifikat Saya</span>
                 </a>
-                <a href="{{ route('impacttracker.user.index') }}" class="action-btn {{ request()->routeIs('impacttracker.user.index') ? 'ring-2 ring-teal-400 bg-gradient-to-r from-teal-600 to-teal-700' : 'bg-gradient-to-r from-teal-500 to-teal-600' }} block w-full text-center px-4 py-3 text-white rounded-lg hover:from-teal-600 hover:to-teal-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                    <i class="bi bi-bar-chart-line-fill mr-2"></i>
-                    <span>Impact Tracker Saya</span>
-                </a>
                  <a href="{{ route('user.dashboardEO') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
                     <i class="bi bi-gear mr-2"></i>
                     <span>Go to EO Dashboard</span>
@@ -109,25 +106,14 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
 
     <div class="lg:ml-64 min-h-screen">
-        <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="flex flex-col sm:flex-row justify-between items-center mb-10">
                 <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-0 flex items-center">
-                    <i class="bi bi-journal-richtext text-yellow-400 mr-3 text-4xl"></i> 
-                    Portofolio Saya
-                    @if($portfolios->count() > 0) {{-- Menggunakan count() untuk Collection --}}
-                    <span class="ml-3 inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-yellow-300 bg-yellow-700/30 rounded-full ring-1 ring-inset ring-yellow-600/50">
-                        {{ $portfolios->count() }} Entri
-                    </span>
-                    @endif
+                    <i class="bi bi-graph-up text-green-400 mr-3 text-4xl"></i> Impact Tracker Saya
                 </h1>
-                <div class="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0">
-                    <a href="{{ route('user.dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-colors duration-200 font-medium text-sm shadow-md">
-                        <i class="bi bi-arrow-left-circle-fill mr-2"></i>Dashboard
-                    </a>
-                    <a href="{{ route('portfolio.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-amber-600 text-slate-900 rounded-xl hover:from-yellow-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 shadow-xl font-semibold text-sm">
-                        <i class="bi bi-plus-circle-dotted mr-2"></i> Tambah Entri Baru
-                    </a>
-                </div>
+                <a href="{{ route('user.dashboard') }}" class="inline-flex items-center px-6 py-2.5 border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-colors duration-200 transform hover:scale-105 font-medium text-sm shadow-md">
+                    <i class="bi bi-arrow-left-circle-fill mr-2"></i>Dashboard Utama
+                </a>
             </div>
 
             @if(session('success'))
@@ -136,82 +122,52 @@
                     <span class="text-base">{{ session('success') }}</span>
                 </div>
             @endif
-             {{-- Jika ada session error, bisa ditambahkan di sini --}}
-            @if(session('error'))
+             @if(session('error'))
                 <div class="bg-red-800/40 border border-red-600/50 text-red-300 px-5 py-4 rounded-xl mb-6 shadow-lg flex items-center space-x-3 animate-fade-in" role="alert">
                     <i class="bi bi-exclamation-triangle-fill text-2xl"></i>
                     <span class="text-base">{{ session('error') }}</span>
                 </div>
             @endif
 
-
-            @if ($portfolios->isEmpty())
-                <div class="text-center py-16 bg-white/5 backdrop-blur-sm rounded-xl border border-slate-700 shadow-xl animate-fade-in">
-                    <i class="bi bi-journal-medical text-6xl text-slate-500 mb-6"></i>
-                    <p class="text-2xl font-semibold text-white mb-2">Belum Ada Entri Portofolio</p>
-                    <p class="text-slate-400 max-w-md mx-auto mb-6">Mulai tambahkan pengalaman dan kegiatan Anda untuk membangun portofolio yang menarik!</p>
-                    <a href="{{ route('portfolio.create') }}" class="px-8 py-3 bg-gradient-to-r from-yellow-500 to-amber-600 text-slate-900 rounded-xl hover:from-yellow-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 shadow-xl inline-flex items-center space-x-2 text-base font-semibold">
-                        <i class="bi bi-plus-circle-dotted"></i>
-                        <span>Tambah Entri Pertama Anda</span>
-                    </a>
-                </div>
-            @else
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 animate-fade-in">
-                    @foreach ($portfolios as $entry)
-                        <div class="bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl border border-slate-700/50 flex flex-col overflow-hidden hover:border-yellow-500/70 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5">
-                            <div class="flex flex-col flex-grow p-6">
-                                <div class="mb-3">
-                                    <h2 class="text-xl font-bold text-slate-50 hover:text-yellow-400 transition-colors line-clamp-2 mb-1">
-                                        {{-- Jika judul adalah link ke detail portfolio:
-                                        <a href="{{ route('portfolio.show', $entry->id) }}">{{ $entry->title }}</a> 
-                                        --}}
-                                        {{ $entry->title }}
-                                    </h2>
-                                    <p class="text-sm text-slate-300 leading-relaxed line-clamp-3">{{ Str::limit($entry->description ?? '', 120) }}</p>
-                                </div>
-                                <div class="text-xs text-slate-400 space-y-1.5 mb-4">
-                                    <div class="flex items-center">
-                                        <i class="bi bi-calendar3 mr-2 text-sky-400"></i>
-                                        {{ isset($entry->date) ? \Carbon\Carbon::parse($entry->date)->isoFormat('D MMM YY') : '-' }}
-                                    </div>
-                                    @if(isset($entry->location) && !empty($entry->location))
-                                    <div class="flex items-center">
-                                        <i class="bi bi-geo-alt-fill mr-2 text-emerald-400"></i> {{ $entry->location }}
-                                    </div>
-                                    @endif
-                                </div>
-                                
-                                @if ($entry->file_path)
-                                    <div class="mb-4">
-                                        <a href="{{ asset('storage/portfolio_files/' . $entry->file_path) }}" target="_blank" class="inline-flex items-center text-xs font-medium text-sky-400 hover:text-sky-300 transition-colors group">
-                                            <i class="bi bi-paperclip mr-1.5 text-base transform group-hover:rotate-[-12deg] transition-transform"></i> Lihat File Lampiran
-                                        </a>
-                                    </div>
-                                @endif
-
-                                <div class="mt-auto pt-4 border-t border-slate-700/50 flex flex-wrap gap-2 justify-start">
-                                    <a href="{{ route('portfolio.edit', $entry->id) }}" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-amber-500/80 hover:bg-amber-600/90 text-slate-900">
-                                        <i class="bi bi-pencil-square mr-1.5"></i> Edit
-                                    </a>
-                                    <form action="{{ route('portfolio.destroy', $entry->id) }}" method="POST" class="contents" onsubmit="return confirm('Anda yakin ingin menghapus entri portofolio ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm hover:shadow-md bg-rose-600/80 hover:bg-rose-700/90 text-white">
-                                            <i class="bi bi-trash3-fill mr-1.5"></i> Hapus
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                {{-- Paginasi (hanya ditampilkan jika $portfolios adalah Paginator) --}}
-                @if ($portfolios instanceof \Illuminate\Pagination\AbstractPaginator && $portfolios->hasPages())
-                    <div class="mt-10">
-                        {{ $portfolios->links() }} {{-- Pastikan view pagination sudah di-style untuk Tailwind --}}
+            <div class="bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl border border-slate-700/50 animate-fade-in overflow-hidden">
+                @if($impacts->isEmpty())
+                    <div class="text-center py-16 px-6">
+                        <i class="bi bi-clipboard-x-fill text-6xl text-slate-500 mb-6"></i>
+                        <p class="text-2xl font-semibold text-white mb-2">Belum Ada Data Impact</p>
+                        <p class="text-slate-400">Riwayat kontribusi dan impact Anda akan muncul di sini setelah dinilai.</p>
+                    </div>
+                @else
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-slate-800/50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Event</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Jam Kontribusi</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Tugas Selesai</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Social Impact Score</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700/60">
+                                @foreach($impacts as $impact)
+                                <tr class="hover:bg-slate-700/40 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-100">{{ $impact->event->name ?? ($impact->event->title ?? '-') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-sky-300">{{ $impact->hours_contributed }} jam</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-emerald-300">{{ $impact->tasks_completed }} tugas</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-yellow-400">{{ $impact->social_impact_score }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 @endif
+            </div>
+            
+            @if ($impacts instanceof \Illuminate\Pagination\AbstractPaginator && $impacts->hasPages())
+                <div class="mt-8">
+                    {{ $impacts->links() }} {{-- Sesuaikan view pagination jika perlu --}}
+                </div>
             @endif
+
         </div>
     </div>
 

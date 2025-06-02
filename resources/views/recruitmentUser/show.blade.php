@@ -1,148 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Detail Pendaftaran Event</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Detail Pendaftaran Event - {{ $recruitment->event->title ?? 'Event' }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-in': 'slideIn 0.5s ease-out', // Untuk sidebar
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideIn: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(0)' } },
+                    }
+                }
+            },
+            plugins: [
+                require('@tailwindcss/typography'), // Untuk styling teks jika ada HTML
+            ],
+        }
+    </script>
     <style>
-        body {
-            background: linear-gradient(to bottom, #e0eafc, #cfdef3);
-            min-height: 100vh;
-        }
-        .card {
-            border-radius: 18px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-            max-width: 500px;
-            margin: 40px auto;
-        }
-        .card-header {
-            border-radius: 18px 18px 0 0 !important;
-        }
-        .badge {
-            font-size: 1em;
-        }
-        .status-dot {
-            height: 12px;
-            width: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
-        }
-        .status-pending { background: #ffc107; }
-        .status-accepted { background: #28a745; }
-        .status-rejected { background: #dc3545; }
-        .event-title {
-            font-weight: 700;
-            color: #004080;
-            font-size: 1.18em;
-        }
-        .event-desc {
-            font-size: 0.97em;
-            color: #6c757d;
-        }
-        .event-detail {
-            font-size: 0.93em;
-            color: #495057;
-            margin-bottom: 10px;
-        }
-        .info-label {
-            color: #004080;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-        .info-value {
-            margin-bottom: 16px;
-        }
-        .btn-action {
-            border-radius: 18px;
-            font-size: 0.97em;
-            padding: 6px 18px;
-            margin-right: 6px;
-            margin-bottom: 4px;
-            transition: background 0.15s, color 0.15s;
-        }
-        .btn-secondary {
-            background: #e3f0ff;
-            color: #0056b3;
-            border: none;
-        }
-        .btn-secondary:hover {
-            background: #cce3ff;
-            color: #003366;
-        }
-        .btn-outline-primary {
-            border-radius: 18px;
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; /* slate-800 */ }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; /* blue-500 */ border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2563eb; /* blue-600 */ }
     </style>
 </head>
-<body>
-@include('recruitmentUser.navbar')
 
-<div class="container">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Detail Pendaftaran Event</h4>
-            <a href="{{ route('user.dashboard') }}" class="btn btn-outline-light btn-sm">Dashboard</a>
+<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen text-slate-200">
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg">
+        <i class="bi bi-list text-xl"></i>
+    </button>
+
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-slate-800 to-slate-900 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40 shadow-2xl">
+        <div class="p-6 border-b border-slate-700">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="bi bi-speedometer2 text-white"></i>
+                </div>
+                <h2 class="text-xl font-bold text-white">Dashboard</h2>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <div class="info-label">Nama Event</div>
-                <div class="event-title">{{ $recruitment->event->title ?? '-' }}</div>
-                <div class="event-desc">{{ $recruitment->event->description ?? '' }}</div>
-                <div class="event-detail mt-2">
-                    <div>
-                        <i class="bi bi-calendar-event"></i>
-                        {{ isset($recruitment->event->start_date) ? \Carbon\Carbon::parse($recruitment->event->start_date)->format('d M Y') : '-' }}
-                        @if(isset($recruitment->event->end_date) && $recruitment->event->end_date != $recruitment->event->start_date)
-                            &ndash; {{ \Carbon\Carbon::parse($recruitment->event->end_date)->format('d M Y') }}
-                        @endif
+        <nav class="p-4 space-y-2">
+            <div class="space-y-1">
+                 <a href="{{ route('activities.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('activities.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-calendar-event mr-3 text-blue-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Activities</span>
+                </a>
+                <a href="{{ route('feedback.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('feedback.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-chat-square-text mr-3 text-green-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Feedback</span>
+                </a>
+                <a href="{{ route('volunfeeds.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('volunfeeds.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-rss mr-3 text-yellow-400 group-hover:scale-110 transition-transform"></i>
+                    <span>VoluFeed</span>
+                </a>
+                <a href="{{ route('user.notifications.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('user.notifications.index') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-bell mr-3 text-red-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Notifications</span>
+                    @if(isset($unreadNotificationsCount) && $unreadNotificationsCount > 0)
+                        <span class="ml-auto bg-red-500 text-xs px-2 py-1 rounded-full">{{ $unreadNotificationsCount }}</span>
+                    @endif
+                </a>
+                <a href="{{ route('forums.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('forums.*') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-people mr-3 text-purple-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Social Network</span>
+                </a>
+                <a href="{{ route('users.show', Auth::check() ? Auth::id() : 1) }}" class="nav-item group flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ (Auth::check() && Auth::id() == (request()->route('user') ? request()->route('user')->user_id : (isset($user) ? $user->user_id : null)) && (request()->routeIs('users.show') || request()->routeIs('user.profile'))) ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-person-circle mr-3 text-indigo-400 group-hover:scale-110 transition-transform"></i>
+                    <span>Profile Details</span>
+                </a>
+            </div>
+            <div class="pt-4 space-y-3 border-t border-slate-700">
+                <a href="{{ route('referral.index') }}" class="action-btn {{ request()->routeIs('referral.index') ? 'ring-2 ring-sky-400 bg-gradient-to-r from-blue-600 to-blue-700' : 'bg-gradient-to-r from-blue-500 to-blue-600' }} block w-full text-center px-4 py-3 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-share-fill mr-2"></i>
+                    <span>Kode Referral Saya</span>
+                </a>
+                <a href="{{ route('recruitmentUser.index') }}" class="action-btn {{ request()->routeIs('recruitmentUser.*') ? 'ring-2 ring-emerald-400 bg-gradient-to-r from-emerald-600 to-emerald-700' : 'bg-gradient-to-r from-emerald-500 to-emerald-600' }} block w-full text-center px-4 py-3 text-white rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-person-plus-fill mr-2"></i>
+                    <span>Recruitment Event</span>
+                </a>
+                <a href="{{ route('certifications.index') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-award mr-2"></i>
+                    <span>Sertifikat Saya</span>
+                </a>
+                 <a href="{{ route('user.dashboardEO') }}" class="action-btn block w-full text-center px-4 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                    <i class="bi bi-gear mr-2"></i>
+                    <span>Go to EO Dashboard</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+
+    <div class="lg:ml-64 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-xl w-full space-y-8 animate-fade-in">
+            <div>
+                <h1 class="text-center text-3xl md:text-4xl font-extrabold text-white flex items-center justify-center">
+                    <i class="bi bi-file-earmark-text-fill text-emerald-400 mr-3 text-4xl"></i> Detail Pendaftaran
+                </h1>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl border border-slate-700/50 overflow-hidden">
+                <div class="px-6 py-5 bg-slate-800/40 border-b border-slate-700/50">
+                    <h2 class="text-xl font-semibold text-slate-100 leading-tight">
+                        {{ $recruitment->event->title ?? 'Informasi Event Tidak Tersedia' }}
+                    </h2>
+                    @if(isset($recruitment->event->description))
+                    <p class="mt-1 text-sm text-slate-400 line-clamp-2">{{ $recruitment->event->description }}</p>
+                    @endif
+                </div>
+
+                <dl class="divide-y divide-slate-700/50">
+                    <div class="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-slate-400">Tanggal Event</dt>
+                        <dd class="mt-1 text-sm text-slate-200 sm:mt-0 sm:col-span-2">
+                            <i class="bi bi-calendar3 mr-1.5 text-sky-400"></i>
+                            {{ isset($recruitment->event->start_date) ? \Carbon\Carbon::parse($recruitment->event->start_date)->isoFormat('D MMMM YYYY') : '-' }}
+                            @if(isset($recruitment->event->end_date) && $recruitment->event->end_date != $recruitment->event->start_date)
+                                &ndash; {{ \Carbon\Carbon::parse($recruitment->event->end_date)->isoFormat('D MMMM YYYY') }}
+                            @endif
+                        </dd>
                     </div>
                     @if(isset($recruitment->event->location))
-                    <div><i class="bi bi-geo-alt"></i> {{ $recruitment->event->location }}</div>
+                    <div class="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-slate-400">Lokasi Event</dt>
+                        <dd class="mt-1 text-sm text-slate-200 sm:mt-0 sm:col-span-2">
+                            <i class="bi bi-geo-alt-fill mr-1.5 text-pink-400"></i>
+                            {{ $recruitment->event->location }}
+                        </dd>
+                    </div>
                     @endif
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="info-label">Motivasi</div>
-                <div class="info-value">{{ $recruitment->motivation }}</div>
-            </div>
-            <div class="mb-3">
-                <div class="info-label">Status</div>
-                <div class="info-value">
-                    @if($recruitment->status == 'pending')
-                        <span class="status-dot status-pending"></span>
-                        <span class="badge bg-warning text-dark">Pending</span>
-                    @elseif($recruitment->status == 'accepted')
-                        <span class="status-dot status-accepted"></span>
-                        <span class="badge bg-success">Diterima</span>
-                    @elseif($recruitment->status == 'rejected')
-                        <span class="status-dot status-rejected"></span>
-                        <span class="badge bg-danger">Ditolak</span>
+                    <div class="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-slate-400">Motivasi Anda</dt>
+                        <dd class="mt-1 text-sm text-slate-200 sm:mt-0 sm:col-span-2 whitespace-pre-line">{{ $recruitment->motivation }}</dd>
+                    </div>
+                    <div class="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-slate-400">Status Pendaftaran</dt>
+                        <dd class="mt-1 text-sm text-slate-200 sm:mt-0 sm:col-span-2">
+                            @if($recruitment->status == 'pending')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-600/30 text-yellow-200 ring-1 ring-inset ring-yellow-500/40">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-yellow-400 mr-2"></span>Pending
+                                </span>
+                            @elseif($recruitment->status == 'accepted')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-600/30 text-green-200 ring-1 ring-inset ring-green-500/40">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></span>Diterima
+                                </span>
+                            @elseif($recruitment->status == 'rejected')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-600/30 text-red-200 ring-1 ring-inset ring-red-500/40">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-red-400 mr-2"></span>Ditolak
+                                </span>
+                            @else
+                                <span class="text-slate-400">{{ ucfirst($recruitment->status) }}</span>
+                            @endif
+                        </dd>
+                    </div>
+                     @if(isset($recruitment->admin_notes) && !empty($recruitment->admin_notes))
+                    <div class="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-slate-400">Catatan dari EO/Admin</dt>
+                        <dd class="mt-1 text-sm text-slate-200 italic sm:mt-0 sm:col-span-2 whitespace-pre-line">{{ $recruitment->admin_notes }}</dd>
+                    </div>
                     @endif
+                    <div class="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-slate-400">Tanggal Pendaftaran</dt>
+                        <dd class="mt-1 text-sm text-slate-300 sm:mt-0 sm:col-span-2">
+                            {{ $recruitment->date_applied ? \Carbon\Carbon::parse($recruitment->date_applied)->isoFormat('LLLL') : '-' }}
+                        </dd>
+                    </div>
+                </dl>
+                
+                <div class="px-6 py-5 border-t border-slate-700/50 bg-slate-800/20 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <a href="{{ route('recruitmentUser.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700 hover:text-white transition-colors duration-200 font-medium text-sm shadow-md">
+                        <i class="bi bi-arrow-left-short mr-1.5 text-lg"></i> Kembali ke Daftar
+                    </a>
+                    <a href="{{ route('user.dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 border border-sky-600/70 text-sky-300 rounded-xl hover:bg-sky-700/30 hover:text-sky-200 hover:border-sky-500/80 transition-all duration-200 font-medium text-sm shadow-md">
+                        <i class="bi bi-house-door-fill mr-1.5 text-lg"></i> Ke Dashboard Utama
+                    </a>
                 </div>
-            </div>
-            <div class="mb-3">
-                <div class="info-label">Catatan EO/Admin</div>
-                <div class="info-value">{{ $recruitment->admin_notes ?? '-' }}</div>
-            </div>
-            <div class="mb-3">
-                <div class="info-label">Tanggal Daftar</div>
-                <div class="info-value">
-                    {{ $recruitment->date_applied ? \Carbon\Carbon::parse($recruitment->date_applied)->format('d M Y H:i') : '-' }}
-                </div>
-            </div>
-            <div class="mt-4 d-flex justify-content-between">
-                <a href="{{ route('recruitmentUser.index') }}" class="btn btn-secondary btn-action">
-                    <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pendaftaran
-                </a>
-                <a href="{{ route('user.dashboard') }}" class="btn btn-outline-primary btn-action">
-                    <i class="bi bi-house-door"></i> Dashboard
-                </a>
             </div>
         </div>
     </div>
-</div>
-<!-- Bootstrap Icons CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        if (mobileMenuBtn && sidebar && sidebarOverlay) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+        }
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if (!item.classList.contains('bg-slate-700')) { item.style.transform = 'translateX(4px)'; }
+            });
+            item.addEventListener('mouseleave', () => { item.style.transform = 'translateX(0)'; });
+        });
+         document.querySelectorAll('.action-btn').forEach(btn => {
+            const originalBoxShadow = btn.style.boxShadow || '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+            btn.addEventListener('mouseenter', () => { btn.style.boxShadow = '0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1)'; });
+            btn.addEventListener('mouseleave', () => { btn.style.boxShadow = originalBoxShadow; });
+        });
+    </script>
 </body>
 </html>

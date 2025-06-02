@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Event extends Model
 {
     use HasFactory;
@@ -28,4 +29,12 @@ class Event extends Model
 
     // Tentukan waktu format tanggal sesuai dengan field lainnya
     public $timestamps = false;
+
+    public function bookmarks()
+    {
+        return $this->hasMany(\App\Models\Bookmark::class);
+    }
+    public function user() {
+        return $this->belongsTo(User::class, 'organizer_id', 'user_id');
+    }
 }

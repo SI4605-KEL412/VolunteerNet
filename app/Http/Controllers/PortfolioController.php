@@ -49,8 +49,8 @@ class PortfolioController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('portfolio_files', $filename, 'public');
-            $data['file_path'] = $filename;
+            $path = $file->storeAs('portfolio_files', $filename, 'public');
+            $data['file_path'] = $path;
         }
 
         Portfolio::create($data);
@@ -95,8 +95,8 @@ class PortfolioController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('portfolio_files', $filename, 'public');
-            $data['file_path'] = $filename;
+            $path = $file->storeAs('portfolio_files', $filename, 'public');
+            $data['file_path'] = $path;
         }
 
         $portfolio->update($data);

@@ -162,9 +162,7 @@
             @else
                 {{-- Fallback to static content if $activities is NOT set, or IS empty --}}
                 <div class="space-y-4 animate-fade-in">
-                    <p class="text-center text-slate-300 bg-slate-800/50 py-3 rounded-lg border border-slate-700 shadow">
-                        <i class="bi bi-info-circle mr-2"></i>Menampilkan contoh riwayat aktivitas. Data aktual akan muncul di sini.
-                    </p>
+
                     
                     <div class="activity-card bg-white/10 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500/70 transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
                         <div class="p-5 flex items-start space-x-4">
